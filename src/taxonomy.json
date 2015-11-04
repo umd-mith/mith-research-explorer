@@ -1,0 +1,548 @@
+[
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "Accessibility",
+        "narrower": [],
+        "slug": "accessibility",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "African American Studies",
+        "narrower": [],
+        "slug": "african-american-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "African Studies",
+        "narrower": [],
+        "slug": "african-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "American Studies",
+        "narrower": [],
+        "slug": "american-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Archives and Editions"
+        ],
+        "name": "Annotation",
+        "narrower": [],
+        "slug": "annotation",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Archives and Editions"
+        ],
+        "name": "Archives",
+        "narrower": [],
+        "slug": "archives",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [],
+        "name": "Archives and Editions",
+        "narrower": [
+            "Annotation",
+            "Archives",
+            "Digital Publishing",
+            "Textual Analysis",
+            "Text Encoding",
+            "Image Analysis",
+            "Digital Musicology"
+        ],
+        "slug": "archives-editions",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "Art History",
+        "narrower": [],
+        "slug": "art-history",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "Asian Studies",
+        "narrower": [],
+        "slug": "asian-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "Chinese Studies",
+        "narrower": [],
+        "slug": "chinese-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Education and Information Studies"
+        ],
+        "name": "DH Organizations",
+        "narrower": [],
+        "slug": "dh-organizations",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Performing Arts"
+        ],
+        "name": "Dance",
+        "narrower": [],
+        "slug": "dance",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Education and Information Studies"
+        ],
+        "name": "Data Analysis",
+        "narrower": [],
+        "slug": "data-analysis",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Digital Stewardship"
+        ],
+        "name": "Data Curation",
+        "narrower": [],
+        "slug": "data-curation",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Digital Stewardship"
+        ],
+        "name": "Digital Forensics",
+        "narrower": [],
+        "slug": "digital-forensics",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Education and Information Studies"
+        ],
+        "name": "Digital Humanities",
+        "narrower": [],
+        "slug": "digital-humanities",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Archives and Editions"
+        ],
+        "name": "Digital Musicology",
+        "narrower": [],
+        "slug": "digital-musicology",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Digital Stewardship"
+        ],
+        "name": "Digital Preservation",
+        "narrower": [],
+        "slug": "digital-preservation",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Archives and Editions"
+        ],
+        "name": "Digital Publishing",
+        "narrower": [],
+        "slug": "digital-publishing",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [],
+        "name": "Digital Stewardship",
+        "narrower": [
+            "Data Curation",
+            "Digital Preservation",
+            "Digital Forensics"
+        ],
+        "slug": "digital-stewardship",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "Disability Studies",
+        "narrower": [],
+        "slug": "disability-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [],
+        "name": "Diversity",
+        "narrower": [
+            "Accessibility",
+            "African American Studies",
+            "African Studies",
+            "Asian Studies",
+            "Chinese Studies",
+            "Disability Studies",
+            "Japanese Studies",
+            "Jewish Studies",
+            "Latin American Studies",
+            "LGBTW Studies",
+            "Women's Studies"
+        ],
+        "slug": "diversity",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [],
+        "name": "Education and Information Studies",
+        "narrower": [
+            "Training",
+            "Digital Humanities",
+            "Library and Information Science",
+            "Educational Technology",
+            "Data Analysis",
+            "Text Tools",
+            "Website Design",
+            "DH Organizations"
+        ],
+        "slug": "education-information-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Education and Information Studies"
+        ],
+        "name": "Educational Technology",
+        "narrower": [],
+        "slug": "educational-technology",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Media Studies"
+        ],
+        "name": "Electronic Literature",
+        "narrower": [],
+        "slug": "electronic-literature",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "Ethnomusicology",
+        "narrower": [],
+        "slug": "ethnomusicology",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Media Studies"
+        ],
+        "name": "Film and Media Studies",
+        "narrower": [],
+        "slug": "film-media",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Media Studies"
+        ],
+        "name": "Games",
+        "narrower": [],
+        "slug": "games",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "History (International)",
+        "narrower": [],
+        "slug": "history-international",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "History (US)",
+        "narrower": [],
+        "slug": "history-us",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "History of Computing",
+        "narrower": [],
+        "slug": "history-of-computing",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Archives and Editions"
+        ],
+        "name": "Image Analysis",
+        "narrower": [],
+        "slug": "image-analysis",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "Irish Studies",
+        "narrower": [],
+        "slug": "irish-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "Japanese Studies",
+        "narrower": [],
+        "slug": "japanese-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "Jewish Studies",
+        "narrower": [],
+        "slug": "jewish-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "LGBTW Studies",
+        "narrower": [],
+        "slug": "lgbtw-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [],
+        "name": "Language and Culture",
+        "narrower": [
+            "American Studies",
+            "Literature (English)",
+            "Literature (Foreign)",
+            "History (International)",
+            "History (US)",
+            "Linquistics",
+            "Medieval Studies",
+            "Russian Studies",
+            "Art History",
+            "Ethnomusicology",
+            "History of Computing",
+            "Literature (US)",
+            "Irish Studies"
+        ],
+        "slug": "language-culture",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "Latin American Studies",
+        "narrower": [],
+        "slug": "latin-american-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Education and Information Studies"
+        ],
+        "name": "Library and Information Science",
+        "narrower": [],
+        "slug": "library-information-science",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "Linquistics",
+        "narrower": [],
+        "slug": "linquistics",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "Literature (English)",
+        "narrower": [],
+        "slug": "literature-english",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "Literature (Foreign)",
+        "narrower": [],
+        "slug": "literature-foreign",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "Literature (US)",
+        "narrower": [],
+        "slug": "literature-us",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Media Studies"
+        ],
+        "name": "MITH Collections",
+        "narrower": [],
+        "slug": "mith-collections",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [],
+        "name": "Media Studies",
+        "narrower": [
+            "Film and Media Studies",
+            "Electronic Literature",
+            "MITH Collections",
+            "Games"
+        ],
+        "slug": "media-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "Medieval Studies",
+        "narrower": [],
+        "slug": "medieval-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Performing Arts"
+        ],
+        "name": "Music Studies",
+        "narrower": [],
+        "slug": "music-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [],
+        "name": "Performing Arts",
+        "narrower": [
+            "Dance",
+            "Theatre",
+            "Music Studies"
+        ],
+        "slug": "performing-arts",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Language and Culture"
+        ],
+        "name": "Russian Studies",
+        "narrower": [],
+        "slug": "russian-studies",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Archives and Editions"
+        ],
+        "name": "Text Encoding",
+        "narrower": [],
+        "slug": "text-encoding",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Education and Information Studies"
+        ],
+        "name": "Text Tools",
+        "narrower": [],
+        "slug": "text-tools",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Archives and Editions"
+        ],
+        "name": "Textual Analysis",
+        "narrower": [],
+        "slug": "textual-analysis",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Performing Arts"
+        ],
+        "name": "Theatre",
+        "narrower": [],
+        "slug": "theatre",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Education and Information Studies"
+        ],
+        "name": "Training",
+        "narrower": [],
+        "slug": "training",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Education and Information Studies"
+        ],
+        "name": "Website Design",
+        "narrower": [],
+        "slug": "website-design",
+        "taxonomy": "mith_topic"
+    },
+    {
+        "broader": [
+            "Diversity"
+        ],
+        "name": "Women's Studies",
+        "narrower": [],
+        "slug": "womens-studies",
+        "taxonomy": "mith_topic"
+    }
+]
