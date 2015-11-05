@@ -6,6 +6,10 @@ class ProjectView extends Backbone.View {
     initialize(options) {
         this.parentEl = options.parentEl;
 
+        // listeners
+        this.listenTo(this.model, 'view:remove', this.detach);
+        this.listenTo(this.model, 'view:restore', this.render);
+
         var monthNames = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"
         ];
@@ -37,8 +41,14 @@ class ProjectView extends Backbone.View {
 
     }
     render() {
-        $(this.parentEl).append(project_tpl(this.model.toJSON()));
+        this.model.set("attached", true);
+        this.$el.html(project_tpl(this.model.toJSON()));
+        return this.$el;
     } 
+    detach() {
+        this.model.set("attached", false);
+        this.$el.empty();
+    }
 }
 
 export default ProjectView;

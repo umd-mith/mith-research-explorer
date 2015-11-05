@@ -14,7 +14,7 @@ class MRE extends Backbone.View {
 
         // Load projects and start subview
         var projs = new Projects;
-        new ProjectsView({collection: projs, el: '.fusion-portfolio-wrapper'});
+        var projsView = new ProjectsView({collection: projs, el: '.fusion-portfolio-wrapper'});
         projs.url = '/src/projects.json';
         projs.deferred = projs.fetch();
 
@@ -56,9 +56,9 @@ class MRE extends Backbone.View {
                     topic.get("projects").add(projsByTopic[name]);
                 });
                 // Now instantiate topics subview:
-                // $.when.apply(null, sigh).done(function(){(new TopicsView({el: '#topics', collection: topics})).render()});
-                (new TopicsView({el: '#topics', collection: topics})).render()
+                new TopicsView({el: '#topics', collection: topics}).render();
             });
+
         });
     }
 }
