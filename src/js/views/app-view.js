@@ -54,6 +54,16 @@ class MRE extends Backbone.View {
                 topics.each(function(topic){
                     let name = topic.get("name");
                     topic.get("projects").add(projsByTopic[name]);
+                    
+                    // Create nested collections
+                    if (topic.get("narrower") ? topic.get("narrower").length : false){
+                        let subset = new Topics;
+                        topic.set("subset", subset);
+                        for (let narrower of topic.get("narrower")) {
+                            subset.add(topics.where({"name":narrower}));                            
+                        }                        
+                        console.log (subset);
+                    }
                 });
                 // Now instantiate topics subview:
                 new TopicsView({el: '#topics', collection: topics}).render();
