@@ -16,7 +16,7 @@ gulp.task('build:es6', function() {
     .bundle()
     .on('error', function (err) { 
         gutil.log("Error : " + err.message);
-        this.emit('end'); // This is need for the watch task, or it'll hang on error
+        this.emit('end'); // This is needed for the watch task, or it'll hang on error
     })
     .pipe(source('mre.js'))
     .on('error', gutil.log)
