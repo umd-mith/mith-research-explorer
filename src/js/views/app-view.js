@@ -4,6 +4,7 @@ import AppRouter from '../routers/app-router.js';
 import Projects from '../data/coll-projects.js';
 import Topics from '../data/coll-topics.js';
 import ProjectsView from '../views/projects-view.js';
+import TopicsView from '../views/topics-view.js';
 
 class MRE extends Backbone.View {
 
@@ -17,9 +18,8 @@ class MRE extends Backbone.View {
         projs.url = '/src/projects.json';
         projs.deferred = projs.fetch();
 
-        // Load topics and start subview
-        var topics = new Topics();
-        // new TopicsView({collection: topics});
+        // Load topics (subview is instatiated when all data is loaded)
+        var topics = new Topics();        
         topics.url = '/src/taxonomy.json';
         topics.deferred = topics.fetch();
 
@@ -53,9 +53,11 @@ class MRE extends Backbone.View {
             topics.deferred.done( function () {
                 topics.each(function(topic){
                     let name = topic.get("name");
-                    topic.projects.add(projsByTopic[name]);
+                    topic.get("projects").add(projsByTopic[name]);
                 });
-
+                // Now instantiate topics subview:
+                // $.when.apply(null, sigh).done(function(){(new TopicsView({el: '#topics', collection: topics})).render()});
+                (new TopicsView({el: '#topics', collection: topics})).render()
             });
         });
     }

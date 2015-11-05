@@ -5,8 +5,6 @@ import project_tpl from '../templates/project-tpl.js';
 class ProjectView extends Backbone.View {
     initialize(options) {
         this.parentEl = options.parentEl;
-        // {{research_start_mth}} {{research_start_yr}}<span class="dates-sep"> &ndash; </span>
-        //             {{research_end_mth}} {{research_end_yr}}
 
         var monthNames = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"

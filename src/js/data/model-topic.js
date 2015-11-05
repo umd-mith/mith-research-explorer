@@ -4,7 +4,7 @@ import Projects from './coll-projects.js';
 class Topic extends Backbone.Model {
 	constructor(options) {
 		super(options);
-		this.projects = new Projects
+		this.set("projects", new Projects)
 	}
 }
 
