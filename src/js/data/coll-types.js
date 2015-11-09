@@ -1,12 +1,12 @@
 import * as Backbone from 'backbone';
 import Categories from './coll-categories.js';
-import Topic from './model-topic.js';
+import Type from './model-type.js';
 
-class Topics extends Categories {
+class Types extends Categories {
 	constructor() {
 		super();
-		this.model = Topic;		
+		this.model = Type;		
 	}
 }
 
-export default Topics;
+export default Types;

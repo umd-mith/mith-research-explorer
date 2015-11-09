@@ -3,9 +3,11 @@ import * as Backbone from 'backbone';
 import _ from 'backbone/node_modules/underscore';
 import AppRouter from '../routers/app-router.js';
 import Projects from '../data/coll-projects.js';
-import Topics from '../data/coll-topics.js';
 import ProjectsView from '../views/projects-view.js';
+import Topics from '../data/coll-topics.js';
 import TopicsView from '../views/topics-view.js';
+import Types from '../data/coll-types.js';
+import TypesView from '../views/types-view.js';
 
 class MRE extends Backbone.View {
 
@@ -23,6 +25,11 @@ class MRE extends Backbone.View {
         var topics = new Topics(); 
         topics.url = '/src/taxonomy.json';
         topics.deferred = topics.fetch();
+
+        // Load types (subview is instatiated when all data is loaded)
+        var types = new Types(); 
+        types.url = '/src/types.json';
+        types.deferred = types.fetch();
 
         // When projects and topics are loaded, assign projects to each topic
         // Maybe we could use ES6 promises here
@@ -59,9 +66,6 @@ class MRE extends Backbone.View {
 
             topics.deferred.done( function () {                
 
-                // Add catch-all topic
-                topics.add({"name": "Other", "broader": [], "narrower": []});  
-
                 topics.each(function(topic){
                     let name = topic.get("name");                    
                     topic.get("projects").add(projsByTopic[name]);
@@ -81,6 +85,29 @@ class MRE extends Backbone.View {
                     return !topic.get("broader").length
                 }));                
                 new TopicsView({el: '#topics', collection: organizedTopics}).render();
+            });
+
+            types.deferred.done( function () {                 
+
+                types.each(function(type){
+                    let name = type.get("name");                    
+                    type.get("projects").add(projsByType[name]);
+                    
+                    // Create nested collections
+                    if (type.get("narrower") ? type.get("narrower").length : false){
+                        let subset = new Types;
+                        type.set("subset", subset);
+                        for (let narrower of type.get("narrower")) {
+                            subset.add(types.where({"name":narrower}));                            
+                        }                    
+                    }
+                });
+                // Now instantiate types subview, but only for top level types
+                // (the other types will be contained by the top level ones)
+                let organizedTypes = new Backbone.Collection(types.filter(function(type){
+                    return !type.get("broader").length
+                }));                
+                new TypesView({el: '#types', collection: organizedTypes}).render();
             });
 
         });

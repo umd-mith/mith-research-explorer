@@ -17,41 +17,75 @@ class ProjectsView extends Backbone.View {
         );
     }
 
-    showProjectsFor(group) {
+    showProjectsFor(options) {
+        console.log(options);
         this.collection.each(function (proj) {
             if (!proj.get("attached")){
                 proj.trigger("view:restore");
             }
-            if (proj.get("topic")) {
-                if (proj.get("topic").indexOf(group.topic) == -1) {
-                    proj.trigger("view:remove");
-                }
-            }    
-            else proj.trigger("view:remove");
-        });
-    }
-
-    includeProjects(group) {
-        this.collection.each(function (proj) {
-            if (proj.get("topic")) {
-                if (proj.get("topic").indexOf(group.topic) !== -1) {                    
-                    if (!proj.get("attached")){
-                        proj.trigger("view:restore");
-                    }                    
-                }
-            }    
-        });
-    }
-
-    excludeProjects(group) {
-        this.collection.each(function (proj) {
-            if (proj.get("topic")) {
-                if (proj.get("topic").indexOf(group.topic) !== -1) {                    
-                    if (proj.get("attached")){
+            if (options.catType=="Topic"){
+                if (proj.get("topic")) {
+                    if (proj.get("topic").indexOf(options.name) == -1) {
                         proj.trigger("view:remove");
-                    }                    
-                }
-            }    
+                    }
+                } 
+                else proj.trigger("view:remove");   
+            }
+            else if (options.catType=="Type"){
+                if (proj.get("research_type")) {
+                    if (proj.get("research_type").indexOf(options.name) == -1) {
+                        proj.trigger("view:remove");
+                    }
+                } 
+                else proj.trigger("view:remove");   
+            }                
+            
+        });
+    }
+
+    includeProjects(options) {
+        this.collection.each(function (proj) {
+            if (options.catType=="Topic"){
+                if (proj.get("topic")) {
+                    if (proj.get("topic").indexOf(options.name) == -1) {
+                        if (!proj.get("attached")){
+                            proj.trigger("view:restore");
+                        }  
+                    }
+                } 
+            }
+            else if (options.catType=="Type"){
+                if (proj.get("research_type")) {
+                    if (proj.get("research_type").indexOf(options.name) == -1) {
+                        if (!proj.get("attached")){
+                            proj.trigger("view:restore");
+                        }
+                    }
+                }   
+            }
+        });
+    }
+
+    excludeProjects(options) {
+        this.collection.each(function (proj) {
+            if (options.catType=="Topic"){
+                if (proj.get("topic")) {
+                    if (proj.get("topic").indexOf(options.name) == -1) {
+                        if (proj.get("attached")){
+                            proj.trigger("view:remove");
+                        }  
+                    }
+                } 
+            }
+            else if (options.catType=="Type"){
+                if (proj.get("research_type")) {
+                    if (proj.get("research_type").indexOf(options.name) == -1) {
+                        if (proj.get("attached")){
+                            proj.trigger("view:remove");
+                        }
+                    }
+                }   
+            }  
         });
     }
 }

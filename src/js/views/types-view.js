@@ -2,16 +2,16 @@ import $ from 'jquery';
 import * as Backbone from 'backbone';
 import CategoriesView from './categories-view.js';
 
-class TopicsView extends CategoriesView {
+class TypesView extends CategoriesView {
 
     constructor(options){
         super(options);
     }
 
     get events() {
-        return {"click #all_topics": "showAll"};
+        return {"click #all_types": "showAll"};
     }
 
 }
 
-export default TopicsView;
+export default TypesView;
