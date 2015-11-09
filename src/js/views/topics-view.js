@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import * as Backbone from 'backbone';
 import TopicView from './topic-view.js';
+import Events from '../utils/backbone-events.js';
 
 class TopicsView extends Backbone.View {
 
@@ -9,13 +10,13 @@ class TopicsView extends Backbone.View {
     }
 
     initialize() {
-        this.listenTo(this.collection, 'uncheck:others', this.uncheckOthers);
+        this.listenTo(Events, 'topics:uncheck:others', this.uncheckOthers);
     }
 
     uncheckOthers(topicId){
         this.collection.each(function(topic){
             if (topic.cid != topicId){
-                topic.trigger('uncheck');                
+                topic.trigger('uncheck');
             }
         });
     }
@@ -29,10 +30,13 @@ class TopicsView extends Backbone.View {
 
     render() {
         this.collection.each((model) => {
-            if (model.get("projects").length) {
-                this.$el.find("dl").append(
-                    (new TopicView({model:model, collection: this.collection})).render()
-                );             
+            let topicViewEl = (new TopicView({model:model, collection: this.collection})).render()
+            this.$el.first("dl").append(topicViewEl);  
+
+            if (model.get("subset")) {
+                let subel = $("<dl/>").addClass("subset");
+                topicViewEl.append(subel);
+                (new TopicsView({collection:model.get("subset"), el: subel})).render();
             }
         });
     }

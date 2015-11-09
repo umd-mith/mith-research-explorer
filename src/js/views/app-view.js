@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import * as Backbone from 'backbone';
+import _ from 'backbone/node_modules/underscore';
 import AppRouter from '../routers/app-router.js';
 import Projects from '../data/coll-projects.js';
 import Topics from '../data/coll-topics.js';
@@ -19,7 +20,7 @@ class MRE extends Backbone.View {
         projs.deferred = projs.fetch();
 
         // Load topics (subview is instatiated when all data is loaded)
-        var topics = new Topics();        
+        var topics = new Topics(); 
         topics.url = '/src/taxonomy.json';
         topics.deferred = topics.fetch();
 
@@ -32,7 +33,10 @@ class MRE extends Backbone.View {
             var projsByTopic = {}
             projs.each(function(proj){
                 let types = proj.get("research_type");
-                types = types ? types : ["Other"];
+                if (!types) {
+                    proj.set("research_type", ["Other"]);
+                    types = ["Other"];
+                }
                 for (let rType of types) {
                     if (projsByType[rType]) { 
                         projsByType[rType].push(proj);
@@ -41,7 +45,10 @@ class MRE extends Backbone.View {
                 }
 
                 let topics = proj.get("topic");
-                topics = topics ? topics : ["Other"];
+                if (!topics) {
+                    proj.set("topic", ["Other"]);
+                    topics = ["Other"];
+                }
                 for (let topic of topics) {
                     if (projsByTopic[topic]) { 
                         projsByTopic[topic].push(proj);
@@ -50,9 +57,13 @@ class MRE extends Backbone.View {
                 }
             });
 
-            topics.deferred.done( function () {
+            topics.deferred.done( function () {                
+
+                // Add catch-all topic
+                topics.add({"name": "Other", "broader": [], "narrower": []});  
+
                 topics.each(function(topic){
-                    let name = topic.get("name");
+                    let name = topic.get("name");                    
                     topic.get("projects").add(projsByTopic[name]);
                     
                     // Create nested collections
@@ -61,12 +72,15 @@ class MRE extends Backbone.View {
                         topic.set("subset", subset);
                         for (let narrower of topic.get("narrower")) {
                             subset.add(topics.where({"name":narrower}));                            
-                        }                        
-                        console.log (subset);
+                        }                    
                     }
                 });
-                // Now instantiate topics subview:
-                new TopicsView({el: '#topics', collection: topics}).render();
+                // Now instantiate topics subview, but only for top level topics
+                // (the other topics will be contained by the top level ones)
+                let organizedTopics = new Backbone.Collection(topics.filter(function(topic){
+                    return !topic.get("broader").length
+                }));                
+                new TopicsView({el: '#topics', collection: organizedTopics}).render();
             });
 
         });
