@@ -64,7 +64,9 @@ class CategoryView extends Backbone.View {
 
     }
     uncheck() {
-        this.$el.find('.toggle_cat').eq(0).prop("checked", false);
+        let checkbox = this.$el.find('.toggle_cat').eq(0);
+        checkbox.prop("checked", false);
+        this.toggle({"target":checkbox});
     }
     check() {
         let checkbox = this.$el.find('.toggle_cat').eq(0);
