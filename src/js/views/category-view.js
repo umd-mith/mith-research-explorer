@@ -63,13 +63,23 @@ class CategoryView extends Backbone.View {
         // And tell other categories to uncheck themselves
         Events.trigger("categories:uncheck:others", this.model.cid);
 
-        // If the category has a subset, all the subset should be shown too
-        if (this.subset){
-            this.subset.each((subcat) => {
-                Events.trigger("projects:include", {"catType": this.catType, "name":subcat.get("name")});
-                subcat.trigger("check");
-            });
+        let doSubsets = (md) => {
+            // If the category has a subset, all the subset should be toggled too
+            if (md.get("subset")){
+                md.get("subset").each((subcat) => {  
+                    console.log(subcat.get("name"));
+                    Events.trigger("projects:include", {"catType": this.catType, "name":subcat.get("name")});
+                    subcat.trigger("check");
+
+                    if (subcat.get("subset")) {
+                        doSubsets(subcat);
+                    }
+
+                });
+            }
         }
+
+        doSubsets(this.model);
 
     }
     uncheck() {
