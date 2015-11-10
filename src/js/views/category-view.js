@@ -31,19 +31,28 @@ class CategoryView extends Backbone.View {
         }
         else Events.trigger("projects:exclude", {"catType": this.catType, "name":this.model.get("name")});
 
-        // If the category has a subset, all the subset should be toggled too
-        if (this.model.get("subset")){
-            this.subset.each((subcat) => {                
-                if (checked) {
-                    Events.trigger("projects:include", {"catType": this.catType, "name":subcat.get("name")});
-                    subcat.trigger("check");
-                } 
-                else {
-                    Events.trigger("projects:exclude", {"catType": this.catType, "name":subcat.get("name")});
-                    subcat.trigger("uncheck");
-                }
-            });
+        let doSubsets = (md) => {
+            // If the category has a subset, all the subset should be toggled too
+            if (md.get("subset")){
+                md.get("subset").each((subcat) => {                
+                    if (checked) {
+                        Events.trigger("projects:include", {"catType": this.catType, "name":subcat.get("name")});
+                        subcat.trigger("check");
+                    } 
+                    else {
+                        Events.trigger("projects:exclude", {"catType": this.catType, "name":subcat.get("name")});
+                        subcat.trigger("uncheck");
+                    }
+
+                    if (subcat.get("subset")) {
+                        doSubsets(subcat);
+                    }
+
+                });
+            }
         }
+
+        doSubsets(this.model);        
 
     }
     showOne(e) {
@@ -64,9 +73,7 @@ class CategoryView extends Backbone.View {
 
     }
     uncheck() {
-        let checkbox = this.$el.find('.toggle_cat').eq(0);
-        checkbox.prop("checked", false);
-        this.toggle({"target":checkbox});
+        this.$el.find('.toggle_cat').eq(0).prop("checked", false);
     }
     check() {
         let checkbox = this.$el.find('.toggle_cat').eq(0);
