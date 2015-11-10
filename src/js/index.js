@@ -5,5 +5,5 @@ import MRE from './views/app-view.js';
 Backbone.history.start({ pushState: true, root: '/' });
 
 $(() => {
-    new MRE();
+    new MRE({el:"#content"});
 });

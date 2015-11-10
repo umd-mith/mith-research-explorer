@@ -5,16 +5,45 @@ import Events from '../utils/backbone-events.js';
 
 class ProjectsView extends Backbone.View {
     initialize() {
-        this.listenTo(this.collection, 'add', this.addOne)
         this.listenTo(Events, "projects:showOne", this.showProjectsFor);
         this.listenTo(Events, "projects:include", this.includeProjects);
         this.listenTo(Events, "projects:exclude", this.excludeProjects);
+        this.listenTo(this, "projects:sort", this.sortProjects);
     }
 
-    addOne(model) {
-        this.$el.append(
-            (new ProjectView({model:model})).render()
-        );
+    render(order) {
+        if (!order) {
+            for (let model of this.collection.models.reverse()) {
+                this.$el.append(
+                    (new ProjectView({model:model})).render()
+                );
+            }
+        }
+        if (!order || order == 'year_newest') {
+            for (let model of this.collection.models.reverse()) {
+                if (model.get("attached")){
+                    this.$el.append(
+                        (new ProjectView({model:model})).render()
+                    );
+                }
+            }
+        }
+        else {
+            this.collection.sort();
+            this.collection.each( (model) =>{
+                if (model.get("attached")) {
+                    this.$el.append(                    
+                        (new ProjectView({model:model})).render()
+                    );
+                }
+            });
+        }
+        
+    }
+
+    sortProjects(order) {
+        this.$el.empty();
+        this.render(order);
     }
 
     showProjectsFor(options) {

@@ -6,6 +6,12 @@ class Projects extends Backbone.Collection {
 		super(options);
 		this.model = Project;
 	}
+	comparator(model){
+		let yyyymm = model.get("research_start_yyyymm");
+		let yr = model.get("research_start_yr")
+		
+		return yyyymm ? yyyymm : yr;
+	}
 }
 
 export default Projects;

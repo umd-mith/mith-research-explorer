@@ -34,9 +34,18 @@ class ProjectView extends Backbone.View {
             }
             endDate += date.getFullYear();
         }
-        
-        if (startDate && endDate){
-            this.model.set("date", startDate+" – "+endDate);
+
+        if (!startDate) {
+            startDate = this.model.get("research_start_yr");
+        }
+        if (!endDate) {
+            endDate = this.model.get("research_end_yr");
+        }
+
+        if (startDate){
+            let dateString = startDate+" – "
+            dateString = endDate ? dateString + endDate : dateString;
+            this.model.set("date", dateString);
         }
 
     }

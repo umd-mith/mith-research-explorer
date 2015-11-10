@@ -11,13 +11,26 @@ import TypesView from '../views/types-view.js';
 
 class MRE extends Backbone.View {
 
+    events() {
+        return {
+            'change #select_yr' : 'sortProjects'
+        };
+    }
+
+    sortProjects(e) {
+        e.preventDefault();
+        this.projsView.trigger("projects:sort", $(e.target).find(":selected").val());
+    }
+
     initialize() {
         // Start router
-        new AppRouter();
+        new AppRouter();        
 
         // Load projects and start subview
         var projs = new Projects;
         var projsView = new ProjectsView({collection: projs, el: '.fusion-portfolio-wrapper'});
+        // Make projects view available to class:
+        this.projsView = projsView;
         projs.url = '/src/projects.json';
         projs.deferred = projs.fetch();
 
@@ -34,6 +47,8 @@ class MRE extends Backbone.View {
         // When projects and topics are loaded, assign projects to each topic
         // Maybe we could use ES6 promises here
         projs.deferred.done( function () {
+
+            projsView.render();
 
             // Build table of projects by research type and topic
             var projsByType = {}
