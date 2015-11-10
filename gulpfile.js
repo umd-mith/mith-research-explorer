@@ -28,7 +28,7 @@ gulp.task('watch', function() {
 })
 
 gulp.task('webserver', function() {
-  connect.server({livereload: true});
+  connect.server({livereload: true, port: 8888});
 });
 
 gulp.task('default', ['build:es6']);
