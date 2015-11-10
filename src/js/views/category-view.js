@@ -67,7 +67,6 @@ class CategoryView extends Backbone.View {
             // If the category has a subset, all the subset should be toggled too
             if (md.get("subset")){
                 md.get("subset").each((subcat) => {  
-                    console.log(subcat.get("name"));
                     Events.trigger("projects:include", {"catType": this.catType, "name":subcat.get("name")});
                     subcat.trigger("check");
 
