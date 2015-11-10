@@ -18,7 +18,6 @@ class ProjectsView extends Backbone.View {
     }
 
     showProjectsFor(options) {
-        console.log(options);
         this.collection.each(function (proj) {
             if (!proj.get("attached")){
                 proj.trigger("view:restore");
@@ -70,7 +69,7 @@ class ProjectsView extends Backbone.View {
         this.collection.each(function (proj) {
             if (options.catType=="Topic"){
                 if (proj.get("topic")) {
-                    if (proj.get("topic").indexOf(options.name) == -1) {
+                    if (proj.get("topic").indexOf(options.name) !== -1) {
                         if (proj.get("attached")){
                             proj.trigger("view:remove");
                         }  
@@ -79,7 +78,7 @@ class ProjectsView extends Backbone.View {
             }
             else if (options.catType=="Type"){
                 if (proj.get("research_type")) {
-                    if (proj.get("research_type").indexOf(options.name) == -1) {
+                    if (proj.get("research_type").indexOf(options.name) !== -1) {
                         if (proj.get("attached")){
                             proj.trigger("view:remove");
                         }
