@@ -12,29 +12,41 @@ class ProjectsView extends Backbone.View {
     }
 
     render(order) {
+
         if (!order) {
+            this.collection.sort();
             for (let model of this.collection.models.reverse()) {
                 this.$el.append(
                     (new ProjectView({model:model})).render()
                 );
             }
         }
-        if (!order || order == 'year_newest') {
+        else if (order == 'year_newest') {
             for (let model of this.collection.models.reverse()) {
-                if (model.get("attached")){
-                    this.$el.append(
-                        (new ProjectView({model:model})).render()
-                    );
+                // If the project was not previously visible, hide it again.
+                let wasAttached = model.get("attached");
+
+                this.$el.append(
+                    (new ProjectView({model:model})).render()
+                );
+                
+                if (!wasAttached){
+                    model.trigger("view:remove");
                 }
             }
         }
         else {
             this.collection.sort();
             this.collection.each( (model) =>{
-                if (model.get("attached")) {
-                    this.$el.append(                    
-                        (new ProjectView({model:model})).render()
-                    );
+                // If the project was not previously visible, hide it again.
+                let wasAttached = model.get("attached");
+
+                this.$el.append(                    
+                    (new ProjectView({model:model})).render()
+                );
+                
+                if (!wasAttached){
+                    model.trigger("view:remove");
                 }
             });
         }
