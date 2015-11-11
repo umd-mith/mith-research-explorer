@@ -14,8 +14,8 @@ class ProjectView extends Backbone.View {
           "July", "August", "September", "October", "November", "December"
         ];
 
-        let startDateRaw = this.model.get("research_start_yyyymm");
-        let endDateRaw = this.model.get("research_end_yyyymm");
+        let startDateRaw = this.model.get("start");
+        let endDateRaw = this.model.get("end");
         let startDate = "";
         let endDate = "";
         if (startDateRaw) {
@@ -33,13 +33,6 @@ class ProjectView extends Backbone.View {
                 endDate = month + " ";
             }
             endDate += date.getFullYear();
-        }
-
-        if (!startDate) {
-            startDate = this.model.get("research_start_yr");
-        }
-        if (!endDate) {
-            endDate = this.model.get("research_end_yr");
         }
 
         if (startDate){

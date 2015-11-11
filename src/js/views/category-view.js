@@ -95,12 +95,12 @@ class CategoryView extends Backbone.View {
         if (this.subset){
             this.subset.each(function(subcat){
                 subcat.get("projects").each(function(project){
-                    containedProjects.add(project.get("name"));
+                    containedProjects.add(project.get("slug"));
                 });
             });
         }
         this.model.get("projects").each(function(project){
-            containedProjects.add(project.get("name"));
+            containedProjects.add(project.get("slug"));
         });
         this.model.set("totProjects", containedProjects.size)
 

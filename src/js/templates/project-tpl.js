@@ -6,8 +6,8 @@ let project_tpl = `
         <div class="fusion-image-wrapper" aria-haspopup="true">
             <a href="/research/{{name}}">
                 <img width="669" height="200" 
-                     src="https://dev.mith.org/wp-content/uploads/2014/04/header_hathi-trust.png" 
-                     class="attachment-full wp-post-image" alt="header_hathi-trust" />
+                     src="{{thumbnail}}" 
+                     class="attachment-full wp-post-image" />
             </a>
         </div>
         <div class="fusion-portfolio-content mith-research-content">
