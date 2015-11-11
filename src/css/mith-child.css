@@ -1,0 +1,125 @@
+@charset "UTF-8";
+/*
+ Theme Name:   MITH Avada Child
+ Theme URI:    http://
+ Description:  A child theme for Avada
+ Author:       Kirsten Keister
+ Author URI:   http://
+ Template:     Avada
+ Version:      1.0.0
+ License:      -
+ License URI:  -
+ Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
+ Text Domain:  Avada
+*/
+
+#umh-cont { z-index: 10020 !important; }
+.fusion-logo a img { width: 380px; }
+
+
+/** Layout **/
+.post-type-archive-mith_dialogue #content, .single-mith_person #content { width: 56%; margin-left: 22%; }
+.post-type-archive-mith_dialogue #main #sidebar, .single-mith_person #main #sidebar { width: 19%; margin-left: -78%; }
+.post-type-archive-mith_dialogue #main #sidebar-2, .single-mith_person #main #sidebar-2 { width: 19%; margin-left: 3%; }
+
+/** Images **/
+.page .post-slideshow.fusion-flexslider .slides li a,
+.page .post-slideshow.fusion-flexslider .slides li { pointer-events: none; cursor: default; }
+
+
+/** Research Items **/
+.research-details .research-info-box { margin-bottom: 40px; }
+.research-content .research-details h3 { margin-bottom: 20px; }
+.sidebar .widget.research-info-box ul { padding: 0; margin:0; list-style-type: none; }
+.sidebar .widget.research-info-box ul li { padding: 12px 0; display:block; border-bottom: 1px solid #cdcdcd; }
+.sidebar .widget.research-info-box ul li:first-of-type { padding-top:0; }
+.sidebar .widget.research-info-box ul li:last-of-type { border-bottom: 0; }
+.sidebar .widget.mith_recent_posts-widget ul li:first-of-type { padding-top:0; }
+.sidebar .widget li.ext-person { color: #333333; }
+.sidebar .widget li.ext-person span { font-size: 85%; color: #505050; display:block; }
+.sidebar .widget .ext-person-dept { font-style: italic; line-height: 1.5; }
+.research-content .event-meta.fusion-one-third i { display:table-cell; min-width: 20px; }
+.research-content .event-meta.fusion-one-third span:not(.dates-sep) { display:table-cell; }
+
+
+/* Research Archive Page */
+/*.post-type-archive-mith_research #wrapper #main .post .fusion-post-timeline h2 { font-size: 14px; line-height: 16px; }*/
+.post-type-archive-mith_research #main .fusion-portfolio .mith-research-content h2 { margin-top: 0; margin-bottom: 3px; font-size:12px; line-height: normal;}
+.post-type-archive-mith_research .fusion-post-content  { font-size: 10px; line-height: 1.5; }
+.post-type-archive-mith_research .fusion-portfolio-wrapper .fusion-col-spacing { border-left: #dcdcdc 1px solid; }
+.post-type-archive-mith_research .fusion-portfolio-content-wrapper .fusion-portfolio-content { margin: 0 0 0 0; }
+
+.post-type-archive-mith_research .fusion-blog-layout-timeline .fusion-post-content-wrapper { padding: 15px 10px 0 10px; }
+.post-type-archive-mith_research .fusion-blog-layout-timeline .fusion-post-content-container { font-size: 11px; line-height: 1.5; margin-top:0px; }
+.post-type-archive-mith_research .fusion-blog-layout-timeline .fusion-post-content-wrapper .image-wrapper { margin: -15px -10px 10px -10px; }
+
+.post-type-archive-mith_research .fusion-filter.fusion-active a,
+.post-type-archive-mith_research .fusion-filters { font-size: 11px; line-height:21px;}
+.post-type-archive-mith_research .fusion-filter { float: none; }
+.post-type-archive-mith_research .fusion-filters label { /*font-weight: 600; text-transform: uppercase; line-height: 28px; font-size: 13px; */}
+.post-type-archive-mith_research .fusion-filter a,
+.post-type-archive-mith_research .fusion-filters .fusion-filter.fusion-active a { border-top: none; border-bottom: none;}
+.post-type-archive-mith_research .fusion-filter a span { float: right; }
+.post-type-archive-mith_research .fusion-filter.filter-child { padding-left: 8px; }
+
+.research-portfolio .gform_wrapper { float: left; margin-bottom: 0; }
+.research-portfolio .gform_wrapper .gfield_label { float: left; margin: 0 1em 0 0; text-transform: uppercase; font-size: 11px; font-weight: 600; line-height: 33px; }
+.research-portfolio .ginput_container { float: left; }
+.research-portfolio .gform_wrapper .gfield select { min-width: 160px !important; }
+.research-portfolio .gform_wrapper .gfield option { }
+
+/** Dialogues **/
+.mith_dialogue .post-content .dialogue-info h3, 
+.dialogue-archive .dialogue-info h3 { font-weight: 600 !important; margin-top: 0; margin-bottom: 0; }
+.mith_dialogue .post-content .dialogue-info h3 span, 
+.dialogue-archive .dialogue-info h3 span { font-weight: normal; font-style: italic; }
+.mith-dialogue .post-content .abstract .speaker-bio p { color: #666666; }
+
+.fusion-reading-box-container.dd-info .reading-box { padding: 20px 18px 13px 20px; color: #888888; line-height: normal; font-size: 90%; }
+.fusion-reading-box-container.dd-info .reading-box p { margin-bottom: 10px; }
+
+.single-mith_dialogue .sidebar .widget li { padding: 12px 0; display: block; border-bottom: 1px solid #cdcdcd; }
+.single-mith_dialogue .sidebar .widget ul li:first-of-type { padding-top: 0; }
+
+.fusion-blog-layout-medium.dialogue-archive .fusion-post-slideshow { width: 200px; }
+.info-layout-excerpt .post-twitter, .info-layout-excerpt .post-website { display:none; }
+
+.upcoming-dialogues.layout-full div[class^='post-'] { display: inline; font-size: 90%; }
+.upcoming-dialogues.layout-full .post-info-title:before, .upcoming-dialogues.layout-full .post-affiliation:before { content: ', '; }
+.sidebar .info-layout-excerpt div[class^='post-'] { display:none; }
+.sidebar .info-layout-excerpt div[class^='post-speaker'] { display:block; }
+.upcoming-dialogues.layout-full div.post-twitter, .upcoming-dialogues.layout-full div.post-website { display:none; }
+
+.dialogues-list.layout-excerpt { font-size: 12px; line-height: 1.5em; }
+.dialogues-list.layout-excerpt .post-info-title { display:none; }
+.dialogues-list.layout-excerpt > .fusion-imageframe { width: 60px; margin-right: 10px !important; margin-bottom: 10px; }
+.sidebar .dialogues-list.layout-excerpt > .fusion-imageframe,
+.fusion-footer .dialogues-list.layout-excerpt > .fusion-imageframe { display: none; }
+.fusion-footer .dialogues-list .post-affiliation { display: none; }
+
+#wrapper .post-content h2.dialogues-series-title { display:inline; }
+#dialogue_series_form { float:right; display:inline; }
+.dialogue-series-form select { -webkit-appearance: none; border: 1px solid #d9d9d9; padding: 5px 20px 5px 5px; margin: 0; border-radius: 2px; background-color: #f9f9f9; background-image: url(images/arrow-up-down.png); background-repeat: no-repeat; background-position: right center; }
+.dialogue-series-form input { -webkit-appearance: none; padding: 5px 6px; border: 1px solid #bbb; color: #FFF; text-transform: uppercase; border-radius: 2px; background-color: #666; }
+.dialogue-series-form input:hover, .dialogue-series input:active { background-color: #BBBBBB; }
+.dialogue-series-item .dialogue-speaker-title { font-style: italic; }
+.dialogue-series-item .dialogue-speaker { font-weight: 600; }
+.dialogue-series-item h4 { margin: 2px 0; }
+.dialogue-series-item .dialogue-time { display: block; }
+.dialogue-series-item .dialogue-sponsor { display: block; font-style:italic; }
+
+/** People **/
+.fusion-post-content .person-info h3, .post-content .person-info h3 { margin-top: 0; margin-bottom: 0; }
+.fusion-post-content .person-info .post-info-title , .post-content .person-info .post-info-title { margin-top: 0; margin-bottom: 10px; }
+.fusion-post-content .person-info .info-dates h4 { line-height: 1.35; margin-top: 4px; margin-bottom: 0; color: #4E4E4E; }
+.fusion-post-content .person-info .info-dates h4:last-of-type { margin-bottom: inherit; }
+
+/** Blog **/
+.fusion-format-box { display: none; }
+
+/** Search **/
+
+/** MISC **/
+.screen-reader-text { display:none; }
+.fusion-alert.alert-lowercase { text-transform:none; }
+.fusion-alert.hide-alert-close .close { display:none; } 
