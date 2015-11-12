@@ -21454,17 +21454,17 @@ var MRE = (function (_Backbone$View) {
             var projsView = new _projectsView2.default({ collection: projs, el: '.fusion-portfolio-wrapper' });
             // Make projects view available to class:
             this.projsView = projsView;
-            projs.url = '/src/projects.json';
+            projs.url = 'src/projects.json';
             projs.deferred = projs.fetch();
 
             // Load topics (subview is instatiated when all data is loaded)
             var topics = new _collTopics2.default();
-            topics.url = '/src/taxonomy.json';
+            topics.url = 'src/taxonomy.json';
             topics.deferred = topics.fetch();
 
             // Load types (subview is instatiated when all data is loaded)
             var types = new _collTypes2.default();
-            types.url = '/src/types.json';
+            types.url = 'src/types.json';
             types.deferred = types.fetch();
 
             // When projects and topics are loaded, assign projects to each topic
