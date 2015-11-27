@@ -4,6 +4,17 @@
   "description": "A Backbone app to list and filter MITH's research projects",
   "author": "MITH",
   "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umd-mith/mith-research-explorer"
+  },
+  "bugs": {
+    "url": "https://github.com/umd-mith/mith-research-explorer/issues"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "backbone": "^1.2.3",
     "handlebars": "^4.0.4",
