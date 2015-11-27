@@ -5,6 +5,9 @@
   "author": "Maryland Institute for Technology in the Humanities <mith-tech@umd.edu>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "^4.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/umd-mith/mith-research-explorer"
