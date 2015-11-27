@@ -1,6 +1,6 @@
 {
   "name": "mith-research-view",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A Backbone app to list and filter MITH's research projects",
   "author": "Maryland Institute for Technology in the Humanities <mith-tech@umd.edu>",
   "license": "MIT",
