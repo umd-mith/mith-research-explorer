@@ -27,20 +27,20 @@ class CategoryView extends Backbone.View {
 
         let checked = $(e.target).prop("checked")
         if (checked) {            
-            Events.trigger("projects:include", {"catType": this.catType, "name":this.model.get("name")});            
+            Events.trigger("projects:include", {"catType": this.catType, "catName":this.model.get("name")});            
         }
-        else Events.trigger("projects:exclude", {"catType": this.catType, "name":this.model.get("name")});
+        else Events.trigger("projects:exclude", {"catType": this.catType, "catName":this.model.get("name")});
 
         let doSubsets = (md) => {
             // If the category has a subset, all the subset should be toggled too
             if (md.get("subset")){
                 md.get("subset").each((subcat) => {                
                     if (checked) {
-                        Events.trigger("projects:include", {"catType": this.catType, "name":subcat.get("name")});
+                        Events.trigger("projects:include", {"catType": this.catType, "catName":subcat.get("name")});
                         subcat.trigger("check");
                     } 
                     else {
-                        Events.trigger("projects:exclude", {"catType": this.catType, "name":subcat.get("name")});
+                        Events.trigger("projects:exclude", {"catType": this.catType, "catName":subcat.get("name")});
                         subcat.trigger("uncheck");
                     }
 
@@ -57,7 +57,7 @@ class CategoryView extends Backbone.View {
     }
     showOne(e) {
         e.preventDefault();
-        Events.trigger("projects:showOne", {"catType": this.catType, "name":this.model.get("name")});
+        Events.trigger("projects:showOne", {"catType": this.catType, "catName":this.model.get("name")});
         // Also check the checkbox
         this.$el.find('.toggle_cat').eq(0).prop("checked", true);
         // And tell other categories to uncheck themselves
@@ -67,7 +67,7 @@ class CategoryView extends Backbone.View {
             // If the category has a subset, all the subset should be toggled too
             if (md.get("subset")){
                 md.get("subset").each((subcat) => {  
-                    Events.trigger("projects:include", {"catType": this.catType, "name":subcat.get("name")});
+                    Events.trigger("projects:include", {"catType": this.catType, "catName":subcat.get("name")});
                     subcat.trigger("check");
 
                     if (subcat.get("subset")) {
