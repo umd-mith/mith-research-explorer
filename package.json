@@ -1,9 +1,23 @@
 {
   "name": "mith-research-view",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A Backbone app to list and filter MITH's research projects",
-  "author": "MITH",
+  "author": "Maryland Institute for Technology in the Humanities <mith-tech@umd.edu>",
   "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umd-mith/mith-research-explorer"
+  },
+  "bugs": {
+    "url": "https://github.com/umd-mith/mith-research-explorer/issues"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "backbone": "^1.2.3",
     "handlebars": "^4.0.4",
