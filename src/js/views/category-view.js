@@ -8,7 +8,10 @@ class CategoryView extends Backbone.View {
     get events() {
         return {
             "click .toggle_cat:first" : "toggle",
-            "click .only_cat:first" : "showOne"
+            "click .only_cat:first" : "showOne",
+            "mouseover dt:first" : "showOnlyBtn",
+            "mouseleave dt:first" : "hideOnlyBtn",
+            "touchstart dt:first" : "showOnlyBtn"
         }
     }
 
@@ -89,6 +92,14 @@ class CategoryView extends Backbone.View {
         checkbox.prop("checked", true);
         this.toggle({"target":checkbox});
 
+    }
+    showOnlyBtn() {
+        // Show the 'only' button
+        this.$el.find('.only_cat:first').css("display", "inline");
+    }
+    hideOnlyBtn() {
+        // Hide the 'only' button
+        this.$el.find('.only_cat:first').css("display", "none");
     }
     render() {
         let containedProjects = new Set();
