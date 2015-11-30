@@ -92,16 +92,28 @@ class CategoryView extends Backbone.View {
     }
     render() {
         let containedProjects = new Set();
-        if (this.subset){
-            this.subset.each(function(subcat){
-                subcat.get("projects").each(function(project){
-                    containedProjects.add(project.get("slug"));
+
+        let countSubset = function (md) {
+            if (md.subset){
+                md.subset.each(function(subcat){
+                    subcat.get("projects").each(function(project){
+                        containedProjects.add(project.get("slug"));
+                    });
+
+                    if (subcat.get("subset")) {
+                        countSubset(subcat);
+                    }
+
                 });
-            });
+            }
         }
+
+        countSubset(this.model);
+        
         this.model.get("projects").each(function(project){
             containedProjects.add(project.get("slug"));
         });
+
         this.model.set("totProjects", containedProjects.size)
 
         // Don't render if there are no contained projects
