@@ -26,7 +26,7 @@ class CategoriesView extends Backbone.View {
 
     render() {
         this.collection.each((model) => {
-            let catViewEl = (new CategoryView({model:model, collection: this.collection})).render()
+            let catViewEl = (new CategoryView({model:model})).render()
             this.$el.first("dl").append(catViewEl);  
 
             if (model.get("subset")) {
