@@ -5,9 +5,17 @@ let project_tpl = `
     <div class="fusion-portfolio-content-wrapper mith-research-content-wrapper" style="opacity: 1">
         <div class="fusion-image-wrapper" aria-haspopup="true">
             <a href="/research/{{slug}}">
+            
                 <img width="669" height="200" 
-                     src="{{thumbnail}}" 
+                     src="
+                     {{#if thumbnail}}
+                     {{thumbnail}}
+                     {{else}}
+                     /src/images/missing.png
+                     {{/if}}
+                     " 
                      class="attachment-full wp-post-image" />
+            
             </a>
         </div>
         <div class="fusion-portfolio-content mith-research-content">

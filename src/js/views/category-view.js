@@ -8,7 +8,10 @@ class CategoryView extends Backbone.View {
     get events() {
         return {
             "click .toggle_cat:first" : "toggle",
-            "click .only_cat:first" : "showOne"
+            "click .only_cat:first" : "showOne",
+            "mouseover dt:first" : "showOnlyBtn",
+            "mouseleave dt:first" : "hideOnlyBtn",
+            "touchstart dt:first" : "showOnlyBtn"
         }
     }
 
@@ -27,20 +30,20 @@ class CategoryView extends Backbone.View {
 
         let checked = $(e.target).prop("checked")
         if (checked) {            
-            Events.trigger("projects:include", {"catType": this.catType, "name":this.model.get("name")});            
+            Events.trigger("projects:include", {"catType": this.catType, "catName":this.model.get("name")});            
         }
-        else Events.trigger("projects:exclude", {"catType": this.catType, "name":this.model.get("name")});
+        else Events.trigger("projects:exclude", {"catType": this.catType, "catName":this.model.get("name")});
 
         let doSubsets = (md) => {
             // If the category has a subset, all the subset should be toggled too
             if (md.get("subset")){
                 md.get("subset").each((subcat) => {                
                     if (checked) {
-                        Events.trigger("projects:include", {"catType": this.catType, "name":subcat.get("name")});
+                        Events.trigger("projects:include", {"catType": this.catType, "catName":subcat.get("name")});
                         subcat.trigger("check");
                     } 
                     else {
-                        Events.trigger("projects:exclude", {"catType": this.catType, "name":subcat.get("name")});
+                        Events.trigger("projects:exclude", {"catType": this.catType, "catName":subcat.get("name")});
                         subcat.trigger("uncheck");
                     }
 
@@ -57,7 +60,7 @@ class CategoryView extends Backbone.View {
     }
     showOne(e) {
         e.preventDefault();
-        Events.trigger("projects:showOne", {"catType": this.catType, "name":this.model.get("name")});
+        Events.trigger("projects:showOne", {"catType": this.catType, "catName":this.model.get("name")});
         // Also check the checkbox
         this.$el.find('.toggle_cat').eq(0).prop("checked", true);
         // And tell other categories to uncheck themselves
@@ -67,7 +70,7 @@ class CategoryView extends Backbone.View {
             // If the category has a subset, all the subset should be toggled too
             if (md.get("subset")){
                 md.get("subset").each((subcat) => {  
-                    Events.trigger("projects:include", {"catType": this.catType, "name":subcat.get("name")});
+                    Events.trigger("projects:include", {"catType": this.catType, "catName":subcat.get("name")});
                     subcat.trigger("check");
 
                     if (subcat.get("subset")) {
@@ -90,18 +93,38 @@ class CategoryView extends Backbone.View {
         this.toggle({"target":checkbox});
 
     }
+    showOnlyBtn() {
+        // Show the 'only' button
+        this.$el.find('.only_cat:first').css("display", "inline");
+    }
+    hideOnlyBtn() {
+        // Hide the 'only' button
+        this.$el.find('.only_cat:first').css("display", "none");
+    }
     render() {
         let containedProjects = new Set();
-        if (this.subset){
-            this.subset.each(function(subcat){
-                subcat.get("projects").each(function(project){
-                    containedProjects.add(project.get("slug"));
+
+        let countSubset = function (md) {
+            if (md.get("subset")){
+                md.get("subset").each(function(subcat){
+                    subcat.get("projects").each(function(project){
+                        containedProjects.add(project.get("slug"));
+                    });
+
+                    if (subcat.get("subset")) {
+                        countSubset(subcat);
+                    }
+
                 });
-            });
+            }
         }
+
+        countSubset(this.model);
+        
         this.model.get("projects").each(function(project){
             containedProjects.add(project.get("slug"));
         });
+
         this.model.set("totProjects", containedProjects.size)
 
         // Don't render if there are no contained projects
