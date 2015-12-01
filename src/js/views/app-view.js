@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import * as Backbone from 'backbone';
-import _ from 'backbone/node_modules/underscore';
+import * as _ from 'underscore';
 import AppRouter from '../routers/app-router.js';
 import Projects from '../data/coll-projects.js';
 import ProjectsView from '../views/projects-view.js';
