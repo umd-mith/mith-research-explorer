@@ -105,8 +105,8 @@ class CategoryView extends Backbone.View {
         let containedProjects = new Set();
 
         let countSubset = function (md) {
-            if (md.subset){
-                md.subset.each(function(subcat){
+            if (md.get("subset")){
+                md.get("subset").each(function(subcat){
                     subcat.get("projects").each(function(project){
                         containedProjects.add(project.get("slug"));
                     });
