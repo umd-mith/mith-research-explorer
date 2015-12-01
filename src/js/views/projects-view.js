@@ -88,7 +88,18 @@ class ProjectsView extends Backbone.View {
                         proj.trigger("view:restore");
                     }
                 }   
-            }                
+            }     
+            else if (options.catType=="Sponsor"){
+                if (proj.get("research_sponsor")) {
+                    if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
+                        // Record info about the type
+                        let activeSet = new Set(proj.get("activeSponsors"));
+                        activeSet.add(options.catName);
+                        proj.set("activeSponsors", Array.from(activeSet)); 
+                        proj.trigger("view:restore");
+                    }
+                }   
+            }           
             
         });
     }
@@ -115,6 +126,19 @@ class ProjectsView extends Backbone.View {
                         let activeSet = new Set(proj.get("activeTypes"));
                         activeSet.add(options.catName);
                         proj.set("activeTypes", Array.from(activeSet)); 
+                        if (!proj.get("attached")){
+                            proj.trigger("view:restore");
+                        }
+                    }
+                }   
+            }
+            else if (options.catType=="Sponsor"){
+                if (proj.get("research_sponsor")) {
+                    if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
+                        // Record info about the type
+                        let activeSet = new Set(proj.get("activeSponsors"));
+                        activeSet.add(options.catName);
+                        proj.set("activeSponsors", Array.from(activeSet)); 
                         if (!proj.get("attached")){
                             proj.trigger("view:restore");
                         }
@@ -148,6 +172,19 @@ class ProjectsView extends Backbone.View {
                         let activeSet = new Set(proj.get("activeTypes"));
                         activeSet.delete(options.catName);
                         proj.set("activeTypes", Array.from(activeSet));
+                        if (proj.get("attached") && !activeSet.size){
+                            proj.trigger("view:remove");
+                        }
+                    }
+                }   
+            }  
+            else if (options.catType=="Sponsors"){
+                if (proj.get("research_sponsors")) {
+                    if (proj.get("research_sponsors").indexOf(options.catName) !== -1) {
+                        // Record info about the type
+                        let activeSet = new Set(proj.get("activeSponsors"));
+                        activeSet.delete(options.catName);
+                        proj.set("activeSponsors", Array.from(activeSet));
                         if (proj.get("attached") && !activeSet.size){
                             proj.trigger("view:remove");
                         }

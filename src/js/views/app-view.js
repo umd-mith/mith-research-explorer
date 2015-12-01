@@ -8,6 +8,8 @@ import Topics from '../data/coll-topics.js';
 import TopicsView from '../views/topics-view.js';
 import Types from '../data/coll-types.js';
 import TypesView from '../views/types-view.js';
+import Sponsors from '../data/coll-sponsors.js';
+import SponsorsView from '../views/sponsors-view.js';
 
 class MRE extends Backbone.View {
 
@@ -27,7 +29,7 @@ class MRE extends Backbone.View {
         new AppRouter();        
 
         // Load projects and start subview
-        var projs = new Projects;
+        var projs = new Projects();
         var projsView = new ProjectsView({collection: projs, el: '.fusion-portfolio-wrapper'});
         // Make projects view available to class:
         this.projsView = projsView;
@@ -43,6 +45,10 @@ class MRE extends Backbone.View {
         var types = new Types(); 
         types.url = '/src/types.json';
         types.deferred = types.fetch();
+
+        // Create sponsor and date collections
+        var sponsorsTable = {};
+        var sponsors = new Sponsors();
 
         // When projects and topics are loaded, assign projects to each topic
         // Maybe we could use ES6 promises here
@@ -77,6 +83,23 @@ class MRE extends Backbone.View {
                     } 
                     else projsByTopic[topic] = [proj];
                 }
+
+                // While we're looping on projects, also populate collections for sponsors and dates
+                if (proj.get("research_sponsor")){
+                    for (let sponsor of proj.get("research_sponsor")) {
+                        if (Object.keys(sponsorsTable).indexOf(sponsor) == -1){
+                            // Create sponsor and add to reference table
+                            let spModel = sponsors.add({"name": sponsor});
+                            spModel.get("projects").add(proj);
+                            sponsorsTable[sponsor] = spModel.cid;
+                        } 
+                        else {
+                            // Add this project to existing sponsor
+                            sponsors.get(sponsorsTable[sponsor]).get("projects").add(proj);
+                        }
+                    }
+                }                
+
             });
 
             topics.deferred.done( function () {                
@@ -125,6 +148,8 @@ class MRE extends Backbone.View {
                 new TypesView({el: '#types', collection: organizedTypes}).render();
             });
 
+            // Now instantiate sponsor and date views
+            new SponsorsView({el: '#sponsors', collection: sponsors}).render();
         });
     }
 }
