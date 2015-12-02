@@ -15,14 +15,18 @@ class ProjectsView extends Backbone.View {
 
         if (!order) {
             this.collection.sort();
-            for (let model of this.collection.models.reverse()) {
+            // duplicate array, because reverse() actually changes 
+            // the order of the original array.
+            let models = this.collection.models.slice();
+            for (let model of models.reverse()) {
                 this.$el.append(
                     (new ProjectView({model:model})).render()
                 );
             }
         }
         else if (order == 'year_newest') {
-            for (let model of this.collection.models.reverse()) {
+            let models = this.collection.models.slice();
+            for (let model of models.reverse()) {
                 // If the project was not previously visible, hide it again.
                 let wasAttached = model.get("attached");
 
@@ -36,7 +40,6 @@ class ProjectsView extends Backbone.View {
             }
         }
         else {
-            this.collection.sort();
             this.collection.each( (model) =>{
                 // If the project was not previously visible, hide it again.
                 let wasAttached = model.get("attached");
