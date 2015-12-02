@@ -66,6 +66,7 @@ class ProjectsView extends Backbone.View {
             // Reset all
             proj.set("activeTopics", []);
             proj.set("activeTypes", []);
+            proj.set("activeSponsors", []);
             if (proj.get("attached")){
                 proj.trigger("view:remove");
             }
@@ -74,9 +75,7 @@ class ProjectsView extends Backbone.View {
                 if (proj.get("topic")) {
                     if (proj.get("topic").indexOf(options.catName) !== -1) {
                         // Record info about the topic
-                        let activeSet = new Set(proj.get("activeTopics"));
-                        activeSet.add(options.catName);
-                        proj.set("activeTopics", Array.from(activeSet)); 
+                        proj.set("activeTopics", [options.catName]); 
                         proj.trigger("view:restore");
                     }
                 } 
@@ -85,9 +84,7 @@ class ProjectsView extends Backbone.View {
                 if (proj.get("research_type")) {
                     if (proj.get("research_type").indexOf(options.catName) !== -1) {
                         // Record info about the type
-                        let activeSet = new Set(proj.get("activeTypes"));
-                        activeSet.add(options.catName);
-                        proj.set("activeTypes", Array.from(activeSet)); 
+                        proj.set("activeTypes", [options.catName]); 
                         proj.trigger("view:restore");
                     }
                 }   
@@ -96,9 +93,7 @@ class ProjectsView extends Backbone.View {
                 if (proj.get("research_sponsor")) {
                     if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
                         // Record info about the type
-                        let activeSet = new Set(proj.get("activeSponsors"));
-                        activeSet.add(options.catName);
-                        proj.set("activeSponsors", Array.from(activeSet)); 
+                        proj.set("activeSponsors", [options.catName]); 
                         proj.trigger("view:restore");
                     }
                 }   
@@ -181,13 +176,13 @@ class ProjectsView extends Backbone.View {
                     }
                 }   
             }  
-            else if (options.catType=="Sponsors"){
-                if (proj.get("research_sponsors")) {
-                    if (proj.get("research_sponsors").indexOf(options.catName) !== -1) {
+            else if (options.catType=="Sponsor"){
+                if (proj.get("research_sponsor")) {
+                    if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
                         // Record info about the type
                         let activeSet = new Set(proj.get("activeSponsors"));
                         activeSet.delete(options.catName);
-                        proj.set("activeSponsors", Array.from(activeSet));
+                        proj.set("activeSponsor", Array.from(activeSet));
                         if (proj.get("attached") && !activeSet.size){
                             proj.trigger("view:remove");
                         }
