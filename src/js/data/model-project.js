@@ -6,6 +6,7 @@ class Project extends Backbone.Model {
 		resp["activeTopics"] = resp.topic ? resp.topic : ["Other"];
 		resp["activeTypes"] = resp.research_type ? resp.research_type : ["Other"];
 		resp["activeSponsors"] = resp.research_sponsor ? resp.research_sponsor : ["Other"];
+		resp["activeYears"] = resp.start ? resp.start.substring(0,4) : ["Other"];
 		return resp;
 	}
 }

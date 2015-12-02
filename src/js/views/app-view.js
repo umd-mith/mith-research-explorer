@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import * as Backbone from 'backbone';
 import * as _ from 'underscore';
+import splitUp from '../utils/array-splitUp';
 import AppRouter from '../routers/app-router.js';
 import Projects from '../data/coll-projects.js';
 import ProjectsView from '../views/projects-view.js';
@@ -10,6 +11,8 @@ import Types from '../data/coll-types.js';
 import TypesView from '../views/types-view.js';
 import Sponsors from '../data/coll-sponsors.js';
 import SponsorsView from '../views/sponsors-view.js';
+import Years from '../data/coll-years.js';
+import YearsView from '../views/years-view.js';
 
 class MRE extends Backbone.View {
 
@@ -49,6 +52,8 @@ class MRE extends Backbone.View {
         // Create sponsor and date collections
         var sponsorsTable = {};
         var sponsors = new Sponsors();
+        var yearsTable = {};
+        var years = new Years();
 
         // When projects and topics are loaded, assign projects to each topic
         // Maybe we could use ES6 promises here
@@ -98,9 +103,40 @@ class MRE extends Backbone.View {
                             sponsors.get(sponsorsTable[sponsor]).get("projects").add(proj);
                         }
                     }
+                }
+
+                if (proj.get("start")){
+                    let year = proj.get("start").substring(0,4);
+                    if (Object.keys(yearsTable).indexOf(year) == -1){
+                        // Add to reference table
+                        yearsTable[year] = [proj];
+                    } 
+                    else {
+                        // Add this project to existing year
+                        yearsTable[year].push(proj);
+                    }
                 }                
 
             });
+
+            // Group years
+            let groupedYears = {}
+            let sortedYears = Object.keys(yearsTable).sort();
+            let yearRanges = splitUp(
+                _.range(parseInt(sortedYears[0]), parseInt(sortedYears.slice(-1)[0])+1), 4
+                );
+
+            for (let yRange of yearRanges) {
+                let projectsInRange = [];
+                for (let y of yRange){
+                    if (yearsTable[y]){
+                        projectsInRange = projectsInRange.concat(yearsTable[y]);                        
+                    }
+                }
+                let rangeString = yRange[0].toString() + " – " + yRange.slice(-1)[0].toString();
+                let yrModel = years.add({"name": rangeString});
+                yrModel.get("projects").add(projectsInRange);
+            }            
 
             topics.deferred.done( function () {                
 
@@ -150,6 +186,7 @@ class MRE extends Backbone.View {
 
             // Now instantiate sponsor and date views
             new SponsorsView({el: '#sponsors', collection: sponsors}).render();
+            new YearsView({el: '#years', collection: years}).render();
         });
     }
 }

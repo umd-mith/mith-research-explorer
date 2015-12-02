@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import * as Backbone from 'backbone';
+import * as _ from 'underscore';
 import ProjectView from './project-view.js';
 import Events from '../utils/backbone-events.js';
 
@@ -67,6 +68,7 @@ class ProjectsView extends Backbone.View {
             proj.set("activeTopics", []);
             proj.set("activeTypes", []);
             proj.set("activeSponsors", []);
+            proj.set("activeYears", []);
             if (proj.get("attached")){
                 proj.trigger("view:remove");
             }
@@ -94,6 +96,17 @@ class ProjectsView extends Backbone.View {
                     if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
                         // Record info about the type
                         proj.set("activeSponsors", [options.catName]); 
+                        proj.trigger("view:restore");
+                    }
+                }   
+            }
+            else if (options.catType=="YearRange"){
+                let yearLimits = options.catName.split(" – ");
+                let yearRange = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);   
+                if (proj.get("start")) {
+                    if (yearRange.indexOf(parseInt(proj.get("start").substring(0,4))) !== -1) {
+                        // Record info about the type
+                        proj.set("activeYears", [options.catName]); 
                         proj.trigger("view:restore");
                     }
                 }   
@@ -133,6 +146,21 @@ class ProjectsView extends Backbone.View {
             else if (options.catType=="Sponsor"){
                 if (proj.get("research_sponsor")) {
                     if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
+                        // Record info about the type
+                        let activeSet = new Set(proj.get("activeSponsors"));
+                        activeSet.add(options.catName);
+                        proj.set("activeSponsors", Array.from(activeSet)); 
+                        if (!proj.get("attached")){
+                            proj.trigger("view:restore");
+                        }
+                    }
+                }   
+            }
+            else if (options.catType=="YearRange"){
+                let yearLimits = options.catName.split(" – ");
+                let yearRange = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
+                if (proj.get("start")) {
+                    if (yearRange.indexOf(parseInt(proj.get("start").substring(0,4))) !== -1) {
                         // Record info about the type
                         let activeSet = new Set(proj.get("activeSponsors"));
                         activeSet.add(options.catName);
@@ -188,7 +216,22 @@ class ProjectsView extends Backbone.View {
                         }
                     }
                 }   
-            }  
+            }
+            else if (options.catType=="YearRange"){
+                let yearLimits = options.catName.split(" – ");
+                let yearRange = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
+                if (proj.get("start")) {
+                    if (yearRange.indexOf(parseInt(proj.get("start").substring(0,4))) !== -1) {
+                        // Record info about the type
+                        let activeSet = new Set(proj.get("activeSponsors"));
+                        activeSet.delete(options.catName);
+                        proj.set("activeSponsor", Array.from(activeSet));
+                        if (proj.get("attached") && !activeSet.size){
+                            proj.trigger("view:remove");
+                        }
+                    }
+                }   
+            }    
         });
     }
 }
