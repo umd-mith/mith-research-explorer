@@ -10,6 +10,8 @@ class ProjectView extends Backbone.View {
         this.listenTo(this.model, 'view:remove', this.detach);
         this.listenTo(this.model, 'view:restore', this.render);
 
+        let isActive = this.model.get("activeTypes").indexOf("Active") == -1 ? false : true;
+
         var monthNames = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"
         ];
@@ -18,7 +20,10 @@ class ProjectView extends Backbone.View {
         let endDateRaw = this.model.get("end");
         let startDate = "";
         let endDate = "";
-        if (startDateRaw) {
+        if (/^\d{4}$/.exec(startDateRaw)){
+            startDate = startDateRaw
+        }
+        else if (startDateRaw) {
             let date = new Date(startDateRaw);
             let month = monthNames[date.getMonth()];
             if (month) {
@@ -26,18 +31,23 @@ class ProjectView extends Backbone.View {
             }
             startDate += date.getFullYear();
         }
-        if (endDateRaw) {
+
+        if (/^\d{4}$/.exec(endDateRaw)){
+            endDate = endDateRaw
+        }
+        else if (endDateRaw) {
             let date = new Date(endDateRaw);
             let month = monthNames[date.getMonth()];
             if (month) {
                 endDate = month + " ";
             }
             endDate += date.getFullYear();
-        }
+        } else if (isActive) {
+            endDate += "present";
+        } 
 
         if (startDate){
-            let dateString = startDate+" – "
-            dateString = endDate ? dateString + endDate : dateString;
+            let dateString = endDate ? startDate + " – " + endDate : startDate;
             this.model.set("date", dateString);
         }
 

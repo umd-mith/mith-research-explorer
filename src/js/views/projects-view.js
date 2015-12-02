@@ -15,14 +15,18 @@ class ProjectsView extends Backbone.View {
 
         if (!order) {
             this.collection.sort();
-            for (let model of this.collection.models.reverse()) {
+            // duplicate array, because reverse() actually changes 
+            // the order of the original array.
+            let models = this.collection.models.slice();
+            for (let model of models.reverse()) {
                 this.$el.append(
                     (new ProjectView({model:model})).render()
                 );
             }
         }
         else if (order == 'year_newest') {
-            for (let model of this.collection.models.reverse()) {
+            let models = this.collection.models.slice();
+            for (let model of models.reverse()) {
                 // If the project was not previously visible, hide it again.
                 let wasAttached = model.get("attached");
 
@@ -36,7 +40,6 @@ class ProjectsView extends Backbone.View {
             }
         }
         else {
-            this.collection.sort();
             this.collection.each( (model) =>{
                 // If the project was not previously visible, hide it again.
                 let wasAttached = model.get("attached");
@@ -88,7 +91,18 @@ class ProjectsView extends Backbone.View {
                         proj.trigger("view:restore");
                     }
                 }   
-            }                
+            }     
+            else if (options.catType=="Sponsor"){
+                if (proj.get("research_sponsor")) {
+                    if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
+                        // Record info about the type
+                        let activeSet = new Set(proj.get("activeSponsors"));
+                        activeSet.add(options.catName);
+                        proj.set("activeSponsors", Array.from(activeSet)); 
+                        proj.trigger("view:restore");
+                    }
+                }   
+            }           
             
         });
     }
@@ -115,6 +129,19 @@ class ProjectsView extends Backbone.View {
                         let activeSet = new Set(proj.get("activeTypes"));
                         activeSet.add(options.catName);
                         proj.set("activeTypes", Array.from(activeSet)); 
+                        if (!proj.get("attached")){
+                            proj.trigger("view:restore");
+                        }
+                    }
+                }   
+            }
+            else if (options.catType=="Sponsor"){
+                if (proj.get("research_sponsor")) {
+                    if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
+                        // Record info about the type
+                        let activeSet = new Set(proj.get("activeSponsors"));
+                        activeSet.add(options.catName);
+                        proj.set("activeSponsors", Array.from(activeSet)); 
                         if (!proj.get("attached")){
                             proj.trigger("view:restore");
                         }
@@ -148,6 +175,19 @@ class ProjectsView extends Backbone.View {
                         let activeSet = new Set(proj.get("activeTypes"));
                         activeSet.delete(options.catName);
                         proj.set("activeTypes", Array.from(activeSet));
+                        if (proj.get("attached") && !activeSet.size){
+                            proj.trigger("view:remove");
+                        }
+                    }
+                }   
+            }  
+            else if (options.catType=="Sponsors"){
+                if (proj.get("research_sponsors")) {
+                    if (proj.get("research_sponsors").indexOf(options.catName) !== -1) {
+                        // Record info about the type
+                        let activeSet = new Set(proj.get("activeSponsors"));
+                        activeSet.delete(options.catName);
+                        proj.set("activeSponsors", Array.from(activeSet));
                         if (proj.get("attached") && !activeSet.size){
                             proj.trigger("view:remove");
                         }
