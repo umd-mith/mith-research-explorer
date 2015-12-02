@@ -16,32 +16,34 @@ class ProjectView extends Backbone.View {
           "July", "August", "September", "October", "November", "December"
         ];
 
-        let startDateRaw = this.model.get("start");
-        let endDateRaw = this.model.get("end");
+        let startDateParts = /^(\d{4})-?(\d{2})?-?(\d{2})?/.exec(this.model.get("start"));
+        let startYear = startDateParts ? startDateParts[1] : null;
+        let startMonth = startDateParts ? startDateParts[2] : null;
+        let endDateParts = /^(\d{4})-?(\d{2})?-?(\d{2})?/.exec(this.model.get("end"));
+        let endYear = endDateParts ? endDateParts[1] : null;
+        let endMonth = endDateParts ? endDateParts[2] : null;
         let startDate = "";
         let endDate = "";
-        if (/^\d{4}$/.exec(startDateRaw)){
-            startDate = startDateRaw
+        if (startYear && !startMonth){
+            startDate = startYear;
         }
-        else if (startDateRaw) {
-            let date = new Date(startDateRaw);
-            let month = monthNames[date.getMonth()];
+        else if (startYear && startMonth) {
+            let month = monthNames[parseInt(startMonth)-1];
             if (month) {
                 startDate = month + " ";
             }
-            startDate += date.getFullYear();
+            startDate += startYear;
         }
 
-        if (/^\d{4}$/.exec(endDateRaw)){
-            endDate = endDateRaw
+        if (endYear && !endMonth){
+            endDate = endYear;
         }
-        else if (endDateRaw) {
-            let date = new Date(endDateRaw);
-            let month = monthNames[date.getMonth()];
+        else if (endYear && endMonth) {
+            let month = monthNames[parseInt(endMonth)-1];
             if (month) {
                 endDate = month + " ";
             }
-            endDate += date.getFullYear();
+            endDate += endYear;
         } else if (isActive) {
             endDate += "present";
         } 
