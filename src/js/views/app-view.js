@@ -181,12 +181,12 @@ class MRE extends Backbone.View {
                 let organizedTypes = new Backbone.Collection(types.filter(function(type){
                     return !type.get("broader").length
                 }));                
-                $("#types").append(new TypesView({collection: organizedTypes}).render());
+                new TypesView({el: '#types', collection: organizedTypes}).render();
             });
 
             // Now instantiate sponsor and date views
-            $("#sponsors").append(new SponsorsView({collection: sponsors}).render());
-            $("#years").append(new YearsView({collection: years}).render());
+            new SponsorsView({el: '#sponsors', collection: sponsors}).render();
+            new YearsView({el: '#years', collection: years}).render();
         });
     }
 }

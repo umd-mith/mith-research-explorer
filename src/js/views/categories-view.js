@@ -5,10 +5,6 @@ import Events from '../utils/backbone-events.js';
 
 class CategoriesView extends Backbone.View {
 
-    get tagName() {
-        return "dl";
-    }
-
     initialize() {
         this.listenTo(Events, 'categories:uncheck:others', this.uncheckOthers);
     }
@@ -29,9 +25,16 @@ class CategoriesView extends Backbone.View {
     }
 
     render() {
+
+        let container = $("<dl/>");
+        if (this.className){
+            container.addClass(this.className);
+        }
+
         this.collection.each((model) => {
             let catViewEl = (new CategoryView({model:model})).render()
-            this.$el.append(catViewEl);  
+            container.append(catViewEl)
+            this.$el.append(container);  
 
             if (model.get("subset")) {
                 catViewEl.append(
@@ -39,7 +42,7 @@ class CategoriesView extends Backbone.View {
                 );
             }            
         });
-        return this.$el;
+        return container;
     }
 }
 
