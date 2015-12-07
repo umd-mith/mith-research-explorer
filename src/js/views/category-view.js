@@ -5,6 +5,10 @@ import Events from '../utils/backbone-events.js';
 
 class CategoryView extends Backbone.View {
 
+    get className() {
+        return "category";
+    }
+
     get events() {
         return {
             "click .toggle_cat:first" : "toggle",
