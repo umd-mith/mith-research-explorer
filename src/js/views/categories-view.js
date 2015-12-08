@@ -7,6 +7,7 @@ class CategoriesView extends Backbone.View {
 
     initialize() {
         this.listenTo(Events, 'categories:uncheck:others', this.uncheckOthers);
+        this.listenTo(Events, 'categories:partialCheck', this.partialCheck);
     }
 
     uncheckOthers(catId){
@@ -15,6 +16,16 @@ class CategoriesView extends Backbone.View {
                 cat.trigger('uncheck');
             }
         });
+    }
+
+    partialCheck(catName) {
+        let cat = this.collection.where({"name": catName})[0];
+        if (cat) {
+            cat.trigger("partialCheck"); 
+            if (cat.get("broader").length) {
+                Events.trigger("categories:partialCheck", cat.get("broader")[0]);
+            }
+       }
     }
 
     showAll(e) {
