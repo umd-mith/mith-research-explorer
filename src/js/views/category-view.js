@@ -24,58 +24,73 @@ class CategoryView extends Backbone.View {
         this.collection = options.collection;
         this.listenTo(this.model, 'uncheck', this.uncheck);
         this.listenTo(this.model, 'check', this.check);
+        this.listenTo(this.model, 'partialCheck', this.partialCheck);
         // Convenience property
         this.subset = this.model.get("subset");
         // Get the type of category
         this.catType = this.model.constructor.name;
 
     }
-    toggle(e) {  
 
-        let checked = $(e.target).prop("checked")
-        if (checked) {            
-            Events.trigger("projects:include", {"catType": this.catType, "catName":this.model.get("name")});            
-        }
-        else Events.trigger("projects:exclude", {"catType": this.catType, "catName":this.model.get("name")});
+    _getTerms() {
 
-        let doSubsets = (md) => {
-            // If the category has a subset, all the subset should be toggled too
+        let terms = [this.model.get("name")];        
+
+        let _parseSubsets = (md) => {
             if (md.get("subset")){
-                md.get("subset").each((subcat) => {                
-                    if (checked) {
-                        Events.trigger("projects:include", {"catType": this.catType, "catName":subcat.get("name")});
-                        subcat.trigger("check");
-                    } 
-                    else {
-                        Events.trigger("projects:exclude", {"catType": this.catType, "catName":subcat.get("name")});
-                        subcat.trigger("uncheck");
-                    }
+                md.get("subset").each((subcat) => {
+
+                    terms.push(subcat.get("name"))
 
                     if (subcat.get("subset")) {
-                        doSubsets(subcat);
+                        _parseSubsets(subcat);
                     }
 
                 });
             }
         }
 
-        doSubsets(this.model);        
+        _parseSubsets(this.model);
+
+        return terms;
+
+    }
+
+    toggle(e) {  
+
+        let checked = $(e.target).prop("checked");
+
+        if (checked) {            
+            Events.trigger("projects:intersect", {"catType": this.catType, "catName": this._getTerms()});
+        }
+        else Events.trigger("projects:exclude", {"catType": this.catType, "catName": [this.model.get("name")] });
+
+        if (this.model.get("subset")){
+            this.model.get("subset").each(function(subcat){
+                subcat.trigger("uncheck");
+            });
+        }
+
+        if (this.model.get("broader")) {
+            if (this.model.get("broader").length) {
+                Events.trigger("categories:partialCheck", this.model.get("broader")[0]);
+            }
+        }
 
     }
     showOne(e) {
         e.preventDefault();
-        Events.trigger("projects:showOne", {"catType": this.catType, "catName":this.model.get("name")});
+        Events.trigger("projects:showOne", {"catType": this.catType, "catName": this._getTerms()});
         // Also check the checkbox
         this.$el.find('.toggle_cat').eq(0).prop("checked", true);
         // And tell other categories to uncheck themselves
         Events.trigger("categories:uncheck:others", this.model.cid);
 
-        let doSubsets = (md) => {
-            // If the category has a subset, all the subset should be toggled too
+        let _doSubsets = (md) => {
+            // If the category has a subset, all the subset should be included
             if (md.get("subset")){
                 md.get("subset").each((subcat) => {  
-                    Events.trigger("projects:include", {"catType": this.catType, "catName":subcat.get("name")});
-                    subcat.trigger("check");
+                    Events.trigger("projects:include", {"catType": this.catType, "catName": [subcat.get("name")]});
 
                     if (subcat.get("subset")) {
                         doSubsets(subcat);
@@ -85,17 +100,28 @@ class CategoryView extends Backbone.View {
             }
         }
 
-        doSubsets(this.model);
+        _doSubsets(this.model);
+
+        if (this.model.get("broader")) {
+            if (this.model.get("broader").length) {
+                Events.trigger("categories:partialCheck", this.model.get("broader")[0]);
+            }
+        }
 
     }
     uncheck() {
-        this.$el.find('.toggle_cat').eq(0).prop("checked", false);
+        let box = this.$el.find('.toggle_cat').eq(0)
+        box.prop("checked", false);
+        box.prop("indeterminate", false);
     }
     check() {
         let checkbox = this.$el.find('.toggle_cat').eq(0);
         checkbox.prop("checked", true);
         this.toggle({"target":checkbox});
 
+    }
+    partialCheck() {
+        this.$el.find('.toggle_cat').eq(0).prop("indeterminate", true);
     }
     showOnlyBtn() {
         // Show the 'only' button
