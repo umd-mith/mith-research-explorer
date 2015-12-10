@@ -45,28 +45,9 @@
 /* Research Archive Page */
 /*.post-type-archive-mith_research #wrapper #main .post .fusion-post-timeline h2 { font-size: 14px; line-height: 16px; }*/
 .post-type-archive-mith_research #main .fusion-portfolio .mith-research-content h2 { margin-top: 0; margin-bottom: 3px; font-size:12px; line-height: normal;}
-.post-type-archive-mith_research .fusion-post-content  { font-size: 10px; line-height: 1.5; }
-.post-type-archive-mith_research .fusion-portfolio-wrapper .fusion-col-spacing { border-left: #dcdcdc 1px solid; }
+/*.post-type-archive-mith_research .fusion-post-content  { font-size: 10px; line-height: 1.5; }
+*/.post-type-archive-mith_research .fusion-portfolio-wrapper .fusion-col-spacing { /*border-left: #dcdcdc 1px solid; */}
 .post-type-archive-mith_research .fusion-portfolio-content-wrapper .fusion-portfolio-content { margin: 0 0 0 0; }
-
-.post-type-archive-mith_research .fusion-blog-layout-timeline .fusion-post-content-wrapper { padding: 15px 10px 0 10px; }
-.post-type-archive-mith_research .fusion-blog-layout-timeline .fusion-post-content-container { font-size: 11px; line-height: 1.5; margin-top:0px; }
-.post-type-archive-mith_research .fusion-blog-layout-timeline .fusion-post-content-wrapper .image-wrapper { margin: -15px -10px 10px -10px; }
-
-.post-type-archive-mith_research .fusion-filter.fusion-active a,
-.post-type-archive-mith_research .fusion-filters { font-size: 11px; line-height:21px;}
-.post-type-archive-mith_research .fusion-filter { float: none; }
-.post-type-archive-mith_research .fusion-filters label { /*font-weight: 600; text-transform: uppercase; line-height: 28px; font-size: 13px; */}
-.post-type-archive-mith_research .fusion-filter a,
-.post-type-archive-mith_research .fusion-filters .fusion-filter.fusion-active a { border-top: none; border-bottom: none;}
-.post-type-archive-mith_research .fusion-filter a span { float: right; }
-.post-type-archive-mith_research .fusion-filter.filter-child { padding-left: 8px; }
-
-.research-portfolio .gform_wrapper { float: left; margin-bottom: 0; }
-.research-portfolio .gform_wrapper .gfield_label { float: left; margin: 0 1em 0 0; text-transform: uppercase; font-size: 11px; font-weight: 600; line-height: 33px; }
-.research-portfolio .ginput_container { float: left; }
-.research-portfolio .gform_wrapper .gfield select { min-width: 160px !important; }
-.research-portfolio .gform_wrapper .gfield option { }
 
 /** Dialogues **/
 .mith_dialogue .post-content .dialogue-info h3, 
