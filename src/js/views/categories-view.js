@@ -27,12 +27,12 @@ class CategoriesView extends Backbone.View {
         }        
     }
 
-    partialCheck(catName) {
+    partialCheck(catName, checked) {
         let cat = this.collection.where({"name": catName})[0];
         if (cat) {
-            cat.trigger("partialCheck"); 
+            cat.trigger("partialCheck", checked); 
             if (cat.get("broader").length) {
-                Events.trigger("categories:partialCheck", cat.get("broader")[0]);
+                Events.trigger("categories:partialCheck", cat.get("broader")[0], checked);
             }
        }
     }
