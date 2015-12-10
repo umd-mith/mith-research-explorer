@@ -8,10 +8,6 @@ class TypesView extends CategoriesView {
         super(options);
     }
 
-    get events() {
-        return {"click #all_types": "showAll"};
-    }
-
 }
 
 export default TypesView;

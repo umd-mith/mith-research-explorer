@@ -28,31 +28,7 @@ class CategoryView extends Backbone.View {
         // Convenience property
         this.subset = this.model.get("subset");
         // Get the type of category
-        this.catType = this.model.constructor.name;
-
-    }
-
-    _getTerms() {
-
-        let terms = [this.model.get("name")];        
-
-        let _parseSubsets = (md) => {
-            if (md.get("subset")){
-                md.get("subset").each((subcat) => {
-
-                    terms.push(subcat.get("name"))
-
-                    if (subcat.get("subset")) {
-                        _parseSubsets(subcat);
-                    }
-
-                });
-            }
-        }
-
-        _parseSubsets(this.model);
-
-        return terms;
+        this.catType = this.model.get("type");
 
     }
 
@@ -60,16 +36,36 @@ class CategoryView extends Backbone.View {
 
         let checked = $(e.target).prop("checked");
 
-        if (checked) {            
-            Events.trigger("projects:intersect", {"catType": this.catType, "catName": this._getTerms()});
+        if (checked) {           
+            // Set this category active
+            this.model.set("active", true);
         }
-        else Events.trigger("projects:exclude", {"catType": this.catType, "catName": [this.model.get("name")] });
+        else {
+            // Set this category not active
+            this.model.set("active", false);
+        }
 
-        if (this.model.get("subset")){
-            this.model.get("subset").each(function(subcat){
-                subcat.trigger("uncheck");
-            });
+        let _doSubsets = (md) => {
+            // If the category has a subset, all the subset should be included
+            if (md.get("subset")){
+                md.get("subset").each(function (subcat) {  
+                    if (subcat.get("active")){
+                        subcat.set("active", false, {silent:true});                        
+                    }
+
+                    subcat.trigger("uncheck");
+
+                    if (subcat.get("subset")) {
+                        _doSubsets(subcat);
+                    }
+
+                });
+            }
         }
+        
+        _doSubsets(this.model);
+
+        
 
         if (this.model.get("broader")) {
             if (this.model.get("broader").length) {
@@ -80,27 +76,13 @@ class CategoryView extends Backbone.View {
     }
     showOne(e) {
         e.preventDefault();
-        Events.trigger("projects:showOne", {"catType": this.catType, "catName": this._getTerms()});
+        // Set this category active
+        this.model.set("active", true);
+
         // Also check the checkbox
         this.$el.find('.toggle_cat').eq(0).prop("checked", true);
         // And tell other categories to uncheck themselves
         Events.trigger("categories:uncheck:others", this.model.cid);
-
-        let _doSubsets = (md) => {
-            // If the category has a subset, all the subset should be included
-            if (md.get("subset")){
-                md.get("subset").each((subcat) => {  
-                    Events.trigger("projects:include", {"catType": this.catType, "catName": [subcat.get("name")]});
-
-                    if (subcat.get("subset")) {
-                        doSubsets(subcat);
-                    }
-
-                });
-            }
-        }
-
-        _doSubsets(this.model);
 
         if (this.model.get("broader")) {
             if (this.model.get("broader").length) {
@@ -121,6 +103,9 @@ class CategoryView extends Backbone.View {
 
     }
     partialCheck() {
+        if (this.model.get("active")) {
+            this.model.set("active", false);            
+        }
         this.$el.find('.toggle_cat').eq(0).prop("indeterminate", true);
     }
     showOnlyBtn() {

@@ -8,14 +8,17 @@ class CategoriesView extends Backbone.View {
     initialize() {
         this.listenTo(Events, 'categories:uncheck:others', this.uncheckOthers);
         this.listenTo(Events, 'categories:partialCheck', this.partialCheck);
+        this.listenTo(this.collection, "change:active", this.propagateActive);
     }
 
     uncheckOthers(catId){
         this.collection.each(function(cat){
             if (cat.cid != catId){
+                cat.set("active", false, {silent: true});
                 cat.trigger('uncheck');
             }
         });
+        this.propagateActive();
     }
 
     partialCheck(catName) {
@@ -33,6 +36,10 @@ class CategoriesView extends Backbone.View {
         this.collection.each((cat) => {
             cat.trigger("check");
         });
+    }
+
+    propagateActive() {
+        Events.trigger("app:updateCats", this.collection.first().get("type"));
     }
 
     render() {

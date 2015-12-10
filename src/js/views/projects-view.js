@@ -16,10 +16,7 @@ class ProjectsView extends Backbone.View {
     }
 
     initialize() {
-        this.listenTo(Events, "projects:showOne", this.showProjectsFor);
         this.listenTo(Events, "projects:intersect", this.intersectProjects);
-        this.listenTo(Events, "projects:include", this.includeProjects);
-        this.listenTo(Events, "projects:exclude", this.excludeProjects);
         this.listenTo(this, "projects:sort", this.sortProjects);
     }
 
@@ -73,158 +70,35 @@ class ProjectsView extends Backbone.View {
         this.render(order);
     }
 
-    showProjectsFor(options) {
-        this.collection.each( (proj) => {
-            // Reset all
-            proj.set("activeTopics", []);
-            proj.set("activeTypes", []);
-            proj.set("activeSponsors", []);
-            proj.set("activeYears", []);
-            if (proj.get("attached")){
-                proj.trigger("view:remove");
-            }
-            // Then restore current category
-
-            // Year special case
-            if (options.catType=="YearRange"){
-               let yearLimits = options.catName.split(" – ");
-                let yearRange = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
-                if (proj.get("start")) {
-                    if (yearRange.indexOf(parseInt(proj.get("start").substring(0,4))) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeSponsors"));
-                        activeSet = new Set([...activeSet, ...new Set(options.catName)]);
-                        proj.set("activeSponsors", Array.from(activeSet)); 
-                        proj.trigger("view:restore");
-                    }
-                }
-            }    
-            // The rest
-            else {
-                let field = this.categoriesTable[options.catType];
-                let activeCat = "active" + options.catType;
-                if (proj.get(field)) {           
-                    if (_.intersection(proj.get(field), options.catName).length) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get(activeCat));
-                        activeSet = new Set([...activeSet, ...new Set(options.catName)]);
-                        proj.set(activeCat, Array.from(activeSet)); 
-                        proj.trigger("view:restore");
-                    }
-                }
-            }
-            
-        });
-    }
-
-    intersectProjects(options) {
+    intersectProjects(activeCategories) {
 
         this.collection.each( (proj) => {
 
-            // Only process if already attached    
-            if (proj.get("attached")) {
-
-                // Year special case
-                if (options.catType=="YearRange"){
-                   let yearLimits = options.catName.split(" – ");
-                    let yearRange = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
-                    if (proj.get("start")) {
-                        if (yearRange.indexOf(parseInt(proj.get("start").substring(0,4))) !== -1) {
-                            // Record info about the type
-                            let activeSet = new Set(proj.get("activeSponsors"));
-                            activeSet = new Set([...activeSet, ...new Set(options.catName)]);
-                            proj.set("activeSponsors", Array.from(activeSet)); 
-                            proj.trigger("view:restore");
-                        } else proj.trigger("view:remove");
-                    } else proj.trigger("view:remove");
-                }    
-                // The rest
-                else {
-                    let field = this.categoriesTable[options.catType];
-                    let activeCat = "active" + options.catType;
-                    if (proj.get(field)) {           
-                        if (_.intersection(proj.get(field), options.catName).length) {
-                            // Record info about the type
-                            let activeSet = new Set(proj.get(activeCat));
-                            activeSet = new Set([...activeSet, ...new Set(options.catName)]);
-                            proj.set(activeCat, Array.from(activeSet)); 
-                            proj.trigger("view:restore");
-                        } else proj.trigger("view:remove");
-                    } else proj.trigger("view:remove");
-                }
+            if (!proj.get("attached")){
+                proj.trigger("view:restore");
             }
-        });
-    }
 
-    includeProjects(options) {
+            for (let activeCat of Object.keys(activeCategories)) {
+                if (activeCategories[activeCat].length) {
+                    let field = this.categoriesTable[activeCat];
+                    if (proj.get(field)) {
+                        // it has to intersect with at least one term from each list
+                        // in current active category
+                        for (let terms of activeCategories[activeCat]) {
+                            let fieldData = proj.get(field);
+                            if (activeCat == "YearRange") {
+                                let yearLimits = terms[0].split(" – ");
+                                terms = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
+                                fieldData = [parseInt(fieldData.substring(0,4))];
+                            }
 
-        this.collection.each( (proj) => {
-            if (options.catType=="YearRange"){
-                let yearLimits = options.catName.split(" – ");
-                let yearRange = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
-                if (proj.get("start")) {
-                    if (yearRange.indexOf(parseInt(proj.get("start").substring(0,4))) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeSponsors"));
-                        activeSet = new Set([...activeSet, ...new Set(options.catName)]);
-                        proj.set("activeSponsor", Array.from(activeSet));
-                        if (!proj.get("attached")){
-                            proj.trigger("view:restore");
+                            if (!_.intersection(fieldData, terms).length) {
+                                proj.trigger("view:remove");
+                            }
                         }
                     }
-                }   
+                }                
             }
-            else {
-                let field = this.categoriesTable[options.catType];
-                let activeCat = "active" + options.catType;
-                if (proj.get(field)) {           
-                    if (_.intersection(proj.get(field), options.catName).length) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get(activeCat));
-                        activeSet = new Set([...activeSet, ...new Set(options.catName)]);
-                        proj.set(activeCat, Array.from(activeSet)); 
-                        if (!proj.get("attached")){
-                            proj.trigger("view:restore");
-                        }
-                    }
-                }
-            }    
-        });
-    }
-
-    excludeProjects(options) {
-
-        this.collection.each( (proj) => {
-            if (options.catType=="YearRange"){
-                let yearLimits = options.catName.split(" – ");
-                let yearRange = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
-                if (proj.get("start")) {
-                    if (yearRange.indexOf(parseInt(proj.get("start").substring(0,4))) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeSponsors"));
-                        activeSet.delete(options.catName);
-                        proj.set("activeSponsor", Array.from(activeSet));
-                        if (proj.get("attached") && !activeSet.size){
-                            proj.trigger("view:remove");
-                        }
-                    }
-                }   
-            }
-            else {
-                let field = this.categoriesTable[options.catType];
-                let activeCat = "active" + options.catType;
-                if (proj.get(field)) {           
-                    if (_.intersection(proj.get(field), options.catName).length) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get(activeCat));
-                        activeSet.delete(options.catName);
-                        proj.set(activeCat, Array.from(activeSet)); 
-                        if (proj.get("attached") && !activeSet.size){
-                            proj.trigger("view:remove");
-                        }
-                    }
-                }
-            }    
         });
     }
 }

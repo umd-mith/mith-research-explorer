@@ -2,6 +2,7 @@ import $ from 'jquery';
 import * as Backbone from 'backbone';
 import * as _ from 'underscore';
 import splitUp from '../utils/array-splitUp';
+import Events from '../utils/backbone-events.js';
 import AppRouter from '../routers/app-router.js';
 import Projects from '../data/coll-projects.js';
 import ProjectsView from '../views/projects-view.js';
@@ -18,7 +19,8 @@ class MRE extends Backbone.View {
 
     events() {
         return {
-            'change #select_yr' : 'sortProjects'
+            'change #select_yr' : 'sortProjects',
+            'click #show_all' : 'showAllProjects'
         };
     }
 
@@ -29,7 +31,12 @@ class MRE extends Backbone.View {
 
     initialize() {
         // Start router
-        new AppRouter();        
+        new AppRouter();
+
+        // Keep track of active categories
+        this.activeCategories = {};
+
+        this.listenTo(Events, "app:updateCats", this.updateActiveCats);
 
         // Load projects and start subview
         var projs = new Projects();
@@ -39,21 +46,29 @@ class MRE extends Backbone.View {
         projs.url = '/src/projects.json';
         projs.deferred = projs.fetch();
 
+        // Load all categories
+        this.categories = {};
+
         // Load topics (subview is instatiated when all data is loaded)
         var topics = new Topics(); 
+        this.categories["Topic"] = topics;
         topics.url = '/src/taxonomy.json';
         topics.deferred = topics.fetch();
 
         // Load types (subview is instatiated when all data is loaded)
         var types = new Types(); 
+        this.categories["Type"] = types;
         types.url = '/src/types.json';
         types.deferred = types.fetch();
 
         // Create sponsor and date collections
         var sponsorsTable = {};
         var sponsors = new Sponsors();
+        this.categories["Sponsor"] = sponsors;
+
         var yearsTable = {};
         var years = new Years();
+        this.categories["YearRange"] = years;
 
         // When projects and topics are loaded, assign projects to each topic
         // Maybe we could use ES6 promises here
@@ -77,16 +92,18 @@ class MRE extends Backbone.View {
                     else projsByType[rType] = [proj];
                 }
 
-                let topics = proj.get("topic");
-                if (!topics) {
+                let allTopics = proj.get("topic");
+                if (!allTopics) {
                     proj.set("topic", ["Other"]);
-                    topics = ["Other"];
+                    allTopics = ["Other"];
                 }
-                for (let topic of topics) {
-                    if (projsByTopic[topic]) { 
-                        projsByTopic[topic].push(proj);
-                    } 
-                    else projsByTopic[topic] = [proj];
+                else {
+                    for (let topic of allTopics) {
+                        if (projsByTopic[topic]) { 
+                            projsByTopic[topic].push(proj);
+                        } 
+                        else projsByTopic[topic] = [proj];
+                    }
                 }
 
                 // While we're looping on projects, also populate collections for sponsors and dates
@@ -189,6 +206,26 @@ class MRE extends Backbone.View {
             new YearsView({el: '#years', collection: years}).render();
         });
     }
+
+    updateActiveCats(type){
+
+        if (type) {
+            let cat = this.categories[type];
+            this.activeCategories[type] = cat.getActive();    
+        }
+        else {
+            this.activeCategories = {};
+        }
+        
+        // Propagate to ProjectsViews
+        Events.trigger("projects:intersect", this.activeCategories);
+    }
+
+    showAllProjects(e) {
+        e. preventDefault();
+        this.updateActiveCats();
+    }
+
 }
 
 export default MRE;
