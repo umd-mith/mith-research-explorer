@@ -12,13 +12,19 @@ class CategoriesView extends Backbone.View {
     }
 
     uncheckOthers(catId){
+        let trigger = false;
         this.collection.each(function(cat){
             if (cat.cid != catId){
-                cat.set("active", false, {silent: true});
+                if (cat.get("active")){
+                    trigger = true;
+                    cat.set("active", false, {silent: true});                    
+                }
                 cat.trigger('uncheck');
             }
         });
-        this.propagateActive();
+        if (trigger) {
+            this.propagateActive();
+        }        
     }
 
     partialCheck(catName) {

@@ -80,12 +80,12 @@ class MRE extends Backbone.View {
             var projsByType = {}
             var projsByTopic = {}
             projs.each(function(proj){
-                let types = proj.get("research_type");
-                if (!types) {
+                let allTypes = proj.get("research_type");
+                if (!allTypes) {
                     proj.set("research_type", ["Other"]);
-                    types = ["Other"];
+                    allTypes = ["Other"];
                 }
-                for (let rType of types) {
+                for (let rType of allTypes) {
                     if (projsByType[rType]) { 
                         projsByType[rType].push(proj);
                     } 
@@ -190,7 +190,7 @@ class MRE extends Backbone.View {
                         type.set("subset", subset);
                         for (let narrower of type.get("narrower")) {
                             subset.add(types.where({"name":narrower}));                            
-                        }                    
+                        }
                     }
                 });
                 // Now instantiate types subview, but only for top level types
@@ -217,13 +217,14 @@ class MRE extends Backbone.View {
             this.activeCategories = {};
         }
         
-        // Propagate to ProjectsViews
+        // Propagate to ProjectsView and CategoriesView
         Events.trigger("projects:intersect", this.activeCategories);
+        Events.trigger("categories:updateProjectCounts");
     }
 
     showAllProjects(e) {
         e. preventDefault();
-        this.updateActiveCats();
+        Events.trigger("categories:uncheck:others", []);
     }
 
 }
