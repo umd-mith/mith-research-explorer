@@ -8,10 +8,6 @@ class TopicsView extends CategoriesView {
         super(options);
     }
 
-    get events() {
-        return {"click #all_topics": "showAll"};
-    }
-
 }
 
 export default TopicsView;

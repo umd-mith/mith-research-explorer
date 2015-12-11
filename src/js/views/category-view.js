@@ -24,78 +24,90 @@ class CategoryView extends Backbone.View {
         this.collection = options.collection;
         this.listenTo(this.model, 'uncheck', this.uncheck);
         this.listenTo(this.model, 'check', this.check);
+        this.listenTo(this.model, 'partialCheck', this.partialCheck);
+        this.listenTo(Events, "categories:updateProjectCounts", this.updateProjectCount);
         // Convenience property
         this.subset = this.model.get("subset");
         // Get the type of category
-        this.catType = this.model.constructor.name;
+        this.catType = this.model.get("type");
 
     }
+
     toggle(e) {  
 
-        let checked = $(e.target).prop("checked")
-        if (checked) {            
-            Events.trigger("projects:include", {"catType": this.catType, "catName":this.model.get("name")});            
-        }
-        else Events.trigger("projects:exclude", {"catType": this.catType, "catName":this.model.get("name")});
+        let checked = $(e.target).prop("checked");
 
-        let doSubsets = (md) => {
-            // If the category has a subset, all the subset should be toggled too
+        if (checked) {
+            // Set this category active
+            this.model.set("active", true);
+        }
+        else {
+            // Set this category not active
+            this.model.set("active", false);
+        }
+
+        let _doSubsets = (md) => {
+            // If the category has a subset, all the subset should be included
             if (md.get("subset")){
-                md.get("subset").each((subcat) => {                
-                    if (checked) {
-                        Events.trigger("projects:include", {"catType": this.catType, "catName":subcat.get("name")});
-                        subcat.trigger("check");
-                    } 
-                    else {
-                        Events.trigger("projects:exclude", {"catType": this.catType, "catName":subcat.get("name")});
-                        subcat.trigger("uncheck");
+                md.get("subset").each(function (subcat) {  
+                    if (subcat.get("active")){
+                        subcat.set("active", false);
                     }
 
+                    subcat.trigger("uncheck");
+
                     if (subcat.get("subset")) {
-                        doSubsets(subcat);
+                        _doSubsets(subcat);
                     }
 
                 });
             }
         }
+        
+        _doSubsets(this.model);        
 
-        doSubsets(this.model);        
+        if (this.model.get("broader")) {
+            if (this.model.get("broader").length) {
+                Events.trigger("categories:partialCheck", this.model.get("broader")[0]);
+            }
+        }
 
     }
     showOne(e) {
         e.preventDefault();
-        Events.trigger("projects:showOne", {"catType": this.catType, "catName":this.model.get("name")});
+        // Set this category active
+        this.model.set("active", true);
+
         // Also check the checkbox
         this.$el.find('.toggle_cat').eq(0).prop("checked", true);
         // And tell other categories to uncheck themselves
         Events.trigger("categories:uncheck:others", this.model.cid);
 
-        let doSubsets = (md) => {
-            // If the category has a subset, all the subset should be toggled too
-            if (md.get("subset")){
-                md.get("subset").each((subcat) => {  
-                    Events.trigger("projects:include", {"catType": this.catType, "catName":subcat.get("name")});
-                    subcat.trigger("check");
-
-                    if (subcat.get("subset")) {
-                        doSubsets(subcat);
-                    }
-
-                });
+        if (this.model.get("broader")) {
+            if (this.model.get("broader").length) {
+                Events.trigger("categories:partialCheck", this.model.get("broader")[0]);
             }
         }
 
-        doSubsets(this.model);
-
     }
     uncheck() {
-        this.$el.find('.toggle_cat').eq(0).prop("checked", false);
+        let box = this.$el.find('.toggle_cat').eq(0)
+        box.prop("checked", false);
+        box.prop("indeterminate", false);
+        box.removeClass("indeterminate");
     }
     check() {
-        let checkbox = this.$el.find('.toggle_cat').eq(0);
-        checkbox.prop("checked", true);
-        this.toggle({"target":checkbox});
-
+        let box = this.$el.find('.toggle_cat').eq(0);
+        box.prop("checked", true);
+    }
+    partialCheck() {
+        if (this.model.get("active")) {
+            this.model.set("active", false);            
+        }
+        let box = this.$el.find('.toggle_cat').eq(0);
+        box.prop("indeterminate", true);
+        box.prop("checked", false);
+        box.addClass("indeterminate");
     }
     showOnlyBtn() {
         // Show the 'only' button
@@ -105,34 +117,52 @@ class CategoryView extends Backbone.View {
         // Hide the 'only' button
         this.$el.find('.only_cat:first').css("display", "none");
     }
-    render() {
-        let containedProjects = new Set();
 
-        let countSubset = function (md) {
+    getActiveProjectsCount() {
+        let activeProjects = new Set();
+
+        let _countSubset = function (md) {
             if (md.get("subset")){
                 md.get("subset").each(function(subcat){
                     subcat.get("projects").each(function(project){
-                        containedProjects.add(project.get("slug"));
+                        if (project.get("attached")) {
+                            activeProjects.add(project.get("slug"));                            
+                        }
                     });
 
                     if (subcat.get("subset")) {
-                        countSubset(subcat);
+                        _countSubset(subcat);
                     }
 
                 });
             }
         }
 
-        countSubset(this.model);
+        _countSubset(this.model);
         
         this.model.get("projects").each(function(project){
-            containedProjects.add(project.get("slug"));
+            if (project.get("attached")) {
+                activeProjects.add(project.get("slug"));                            
+            }
         });
 
-        this.model.set("totProjects", containedProjects.size)
+        this.model.set("totProjects", activeProjects.size)
+
+        return activeProjects.size
+    }
+
+    updateProjectCount () {
+
+        this.$el.find("dd").text(this.getActiveProjectsCount());
+
+    }
+
+    render() {
+        
+        let containedProjects = this.getActiveProjectsCount();        
 
         // Don't render if there are no contained projects
-        if (containedProjects.size) {
+        if (containedProjects) {
             this.$el.append(category_tpl(this.model.toJSON()))
         }
         return this.$el;
