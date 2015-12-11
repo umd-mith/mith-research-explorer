@@ -14,6 +14,8 @@ import Sponsors from '../data/coll-sponsors.js';
 import SponsorsView from '../views/sponsors-view.js';
 import Years from '../data/coll-years.js';
 import YearsView from '../views/years-view.js';
+import ActiveProjects from '../data/coll-activeProjects.js';
+import ActiveProjectsView from '../views/activeProjects-view.js';
 
 class MRE extends Backbone.View {
 
@@ -70,6 +72,11 @@ class MRE extends Backbone.View {
         var years = new Years();
         this.categories["YearRange"] = years;
 
+        var activeProjects = new ActiveProjects();
+        this.categories["ActiveProject"] = activeProjects;
+        // this is kind of a hack, but simplifies treating the active switch as a regular category:
+        activeProjects.add({name:"true", slug:"active-true", narrower:[], broader:[]});
+
         // When projects and topics are loaded, assign projects to each topic
         // Maybe we could use ES6 promises here
         projs.deferred.done( function () {
@@ -106,7 +113,7 @@ class MRE extends Backbone.View {
                     }
                 }
 
-                // While we're looping on projects, also populate collections for sponsors and dates
+                // While we're looping on projects, also populate collections for sponsors, dates, and activeprojects
                 if (proj.get("research_sponsor")){
                     for (let sponsor of proj.get("research_sponsor")) {
                         if (Object.keys(sponsorsTable).indexOf(sponsor) == -1){
@@ -132,7 +139,11 @@ class MRE extends Backbone.View {
                         // Add this project to existing year
                         yearsTable[year].push(proj);
                     }
-                }                
+                }     
+
+                if (proj.get("active") == "true"){
+                    activeProjects.first().get("projects").add(proj);
+                }            
 
             });
 
@@ -204,6 +215,9 @@ class MRE extends Backbone.View {
             // Now instantiate sponsor and date views
             new SponsorsView({el: '#sponsors', collection: sponsors}).render();
             new YearsView({el: '#years', collection: years}).render();
+
+            // Now instantiate active topic view
+            new ActiveProjectsView({el: "#activeProjects", collection: activeProjects}).render();
         });
     }
 
