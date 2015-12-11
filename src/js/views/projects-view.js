@@ -11,7 +11,8 @@ class ProjectsView extends Backbone.View {
             "Topic" : "topic",
             "Type" : "research_type",
             "Sponsor" : "research_sponsor",
-            "YearRange" : "start"
+            "YearRange" : "start",
+            "ActiveProject" : "active"
         }
     }
 
@@ -85,13 +86,12 @@ class ProjectsView extends Backbone.View {
                         // it has to intersect with at least one term from each list
                         // in current active category
                         for (let terms of activeCategories[activeCat]) {
-                            let fieldData = proj.get(field);
+                            let fieldData = proj.get(field) instanceof Array ? proj.get(field) : [proj.get(field)];
                             if (activeCat == "YearRange") {
                                 let yearLimits = terms[0].split(" – ");
                                 terms = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
-                                fieldData = [parseInt(fieldData.substring(0,4))];
+                                fieldData = [parseInt(fieldData[0].substring(0,4))];
                             }
-
                             if (!_.intersection(fieldData, terms).length) {
                                 proj.trigger("view:remove");
                             }

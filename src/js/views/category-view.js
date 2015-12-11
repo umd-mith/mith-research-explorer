@@ -68,7 +68,7 @@ class CategoryView extends Backbone.View {
 
         if (this.model.get("broader")) {
             if (this.model.get("broader").length) {
-                Events.trigger("categories:partialCheck", this.model.get("broader")[0]);
+                Events.trigger("categories:partialCheck", this.model.get("broader")[0], checked);
             }
         }
 
@@ -85,7 +85,7 @@ class CategoryView extends Backbone.View {
 
         if (this.model.get("broader")) {
             if (this.model.get("broader").length) {
-                Events.trigger("categories:partialCheck", this.model.get("broader")[0]);
+                Events.trigger("categories:partialCheck", this.model.get("broader")[0], true);
             }
         }
 
@@ -100,14 +100,21 @@ class CategoryView extends Backbone.View {
         let box = this.$el.find('.toggle_cat').eq(0);
         box.prop("checked", true);
     }
-    partialCheck() {
-        if (this.model.get("active")) {
-            this.model.set("active", false);            
-        }
+    partialCheck(checked) {
         let box = this.$el.find('.toggle_cat').eq(0);
-        box.prop("indeterminate", true);
-        box.prop("checked", false);
-        box.addClass("indeterminate");
+        if (checked) {
+            if (this.model.get("active")) {
+                this.model.set("active", false);            
+            }            
+            box.prop("indeterminate", true);
+            box.prop("checked", false);
+            box.addClass("indeterminate");    
+        }
+        else {
+            box.prop("indeterminate", false);
+            box.prop("checked", false);
+            box.removeClass("indeterminate");    
+        }
     }
     showOnlyBtn() {
         // Show the 'only' button
