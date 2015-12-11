@@ -22,7 +22,7 @@ class MRE extends Backbone.View {
     events() {
         return {
             'change #select_yr' : 'sortProjects',
-            'click #show_all' : 'showAllProjects'
+            'click #reset_filters' : 'showAllProjects'
         };
     }
 
