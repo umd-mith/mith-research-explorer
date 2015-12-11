@@ -90,7 +90,7 @@ class ProjectsView extends Backbone.View {
                             if (activeCat == "YearRange") {
                                 let yearLimits = terms[0].split(" – ");
                                 terms = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
-                                fieldData = [parseInt(fieldData.substring(0,4))];
+                                fieldData = [parseInt(fieldData[0].substring(0,4))];
                             }
                             if (!_.intersection(fieldData, terms).length) {
                                 proj.trigger("view:remove");
