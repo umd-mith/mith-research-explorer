@@ -13,6 +13,7 @@ class CategoryView extends Backbone.View {
         return {
             "click .toggle_cat:first" : "toggle",
             "click .only_cat:first" : "showOne",
+            "click .toggle_subset:first" : "toggleSubset",
             "mouseover dt:first" : "showOnlyBtn",
             "mouseleave dt:first" : "hideOnlyBtn",
             "touchstart dt:first" : "showOnlyBtn"
@@ -162,6 +163,22 @@ class CategoryView extends Backbone.View {
 
         this.$el.find("dd").text(this.getActiveProjectsCount());
 
+    }
+
+    toggleSubset() {
+        let subsetEl = this.$el.find(".subset:first");
+        let visible = subsetEl.css("display");
+        let icon = this.$el.find("i:first");
+        if (visible == "none") {
+            subsetEl.css("display", "block");
+            icon.removeClass("fa-caret-up");
+            icon.addClass("fa-caret-right");
+        }
+        else {
+            subsetEl.css("display", "none");
+            icon.removeClass("fa-caret-right");
+            icon.addClass("fa-caret-up");
+        }
     }
 
     render() {
