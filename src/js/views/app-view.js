@@ -42,7 +42,7 @@ class MRE extends Backbone.View {
 
         // Load projects and start subview
         var projs = new Projects();
-        var projsView = new ProjectsView({collection: projs, el: '.fusion-portfolio-wrapper'});
+        var projsView = new ProjectsView({collection: projs, el: '#mre_items div'});
         // Make projects view available to class:
         this.projsView = projsView;
         projs.url = options.projectsData;
