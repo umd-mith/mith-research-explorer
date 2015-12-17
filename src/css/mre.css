@@ -1,3 +1,26 @@
-.only_cat {
-	display: none;
-}
+/***FILTERS***/
+.filters-column label.gfield_label { color: #333333; font-weight: 600; }
+.filters-column span + dl { margin-top: 0; }
+.filters-column dl dl { display: none; }
+.filters-column .category i { float: left; line-height: 20px; }
+#types, #topics, #sponsors { display: block; width: 100%; }
+#all_topics, #all_types, #all_sponsors, #all_years { float: right; font-size: 11px; }
+.filters-column .only_cat { float: right; display: none; position: relative; z-index: 2; color: #444; }
+.filters-column .only_cat:hover { color: #a0ce4e; }
+.filters-column .category { position: relative; font-size: 11px; } /*filter-option*/
+.filters-column dt, .filters-column dd { padding: 4px 0; }
+.filters-column .cb-icon { position: absolute; top: 8px; left: -25px; margin-top: -10px; width: 20px; height: 20px; overflow: hidden; }
+.filters-column .cb-wrapper { display: block; position: relative; z-index: 1; white-space: nowrap; cursor: pointer; margin-left: 33px; }
+.filters-column .cb-input { outline: 0; /*opacity: 0;
+	filter: alpha(opacity=0);*/ -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none; cursor: pointer; width: 100%; height: 100%; top: 0; left: 0; position: absolute; background-image: url(../images/checkbox-sprite.png); background-position: center top; background-repeat: no-repeat; }
+.filters-column .cb-input:checked { background-position: center -30px; }
+.filters-column .cb-label { display: block; white-space: nowrap; text-overflow: ellipsis; -o-text-overflow: ellipsis; -ms-text-overflow: ellipsis; overflow: hidden; }
+.filters-column .cb-label:hover { color: #a0ce4e; }
+.filters-column .cat_count { min-width: 30px; float: right; margin-left: 5px; display: inline-block; text-align: right; position: relative; z-index: 2; }
+.filters-column dl.subset { margin: 0; margin-left: .7em; }
+/***RESEARCH ITEMS***/
+.mith-research-post .fusion-portfolio-content-wrapper { padding: 10px; border: 1px solid #c9c9c9; min-height: 330px; }
+.mith-research-post .fusion-image-wrapper img { margin-bottom: 1em; }
+#wrapper #main .mith-research-post .fusion-portfolio-content > h2.entry-title { line-height:normal; }
+#main .mith-research-content .fusion-post-content-wrapper { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; margin: 0; padding: 0; }
+#main .mith-research-content .fusion-post-content { display:block; height:150px; overflow: hidden; text-overflow: ellipsis; }
