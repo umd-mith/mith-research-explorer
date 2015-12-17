@@ -3,8 +3,10 @@ const gulp  = require('gulp'),
     gutil = require('gulp-util'),
     connect = require('gulp-connect'),
     uglify = require('gulp-uglify');
+    rename = require('gulp-rename'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer'),
     babelify = require('babelify'),
 
 gulp.task('build:es6', function() {
@@ -19,7 +21,10 @@ gulp.task('build:es6', function() {
         this.emit('end'); // This is needed for the watch task, or it'll hang on error
     })
     .pipe(source('mre.js'))
-    .on('error', gutil.log)
+    .pipe(buffer())
+    .pipe(uglify())
+    .on('error', function (err) { gutil.log("Error : " + err.message); })
+    .pipe(rename('mre.min.js'))
     .pipe(gulp.dest('dist/js/'));
 });
 
