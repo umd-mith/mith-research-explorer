@@ -3,21 +3,16 @@ import * as Handlebars from 'handlebars';
 let project_tpl = `
 <div class="fusion-portfolio-post mith-research-post fusion-col-spacing fusion-image-landscape">
     <div class="fusion-portfolio-content-wrapper mith-research-content-wrapper" style="opacity: 1">
-        <div class="fusion-image-wrapper" aria-haspopup="true">
-            <a href="/research/{{slug}}">
-            
-                <img width="669" height="200" 
-                     src="
-                     {{#if thumbnail}}
-                     {{thumbnail}}
-                     {{else}}
-                     /src/images/missing.png
-                     {{/if}}
-                     " 
-                     class="attachment-full wp-post-image" />
-            
-            </a>
-        </div>
+        {{#if thumbnail}}
+            <div class="fusion-image-wrapper" aria-haspopup="true">
+                <a href="/research/{{slug}}">
+                
+                    <img width="669" height="200" src="{{thumbnail}}" 
+                         class="attachment-full wp-post-image" />
+                
+                </a>
+            </div>
+        {{/if}}
         <div class="fusion-portfolio-content mith-research-content">
             <h2 class="entry-title">
                 <a href="/research/{{slug}}/">
