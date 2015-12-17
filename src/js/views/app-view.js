@@ -31,7 +31,7 @@ class MRE extends Backbone.View {
         this.projsView.trigger("projects:sort", $(e.target).find(":selected").val());
     }
 
-    initialize() {
+    initialize(options) {
         // Start router
         new AppRouter();
 
@@ -45,7 +45,7 @@ class MRE extends Backbone.View {
         var projsView = new ProjectsView({collection: projs, el: '.fusion-portfolio-wrapper'});
         // Make projects view available to class:
         this.projsView = projsView;
-        projs.url = '/src/projects.json';
+        projs.url = options.projectsData;
         projs.deferred = projs.fetch();
 
         // Load all categories
@@ -54,13 +54,13 @@ class MRE extends Backbone.View {
         // Load topics (subview is instatiated when all data is loaded)
         var topics = new Topics(); 
         this.categories["Topic"] = topics;
-        topics.url = '/src/taxonomy.json';
+        topics.url = projs.url = options.topicsData;
         topics.deferred = topics.fetch();
 
         // Load types (subview is instatiated when all data is loaded)
         var types = new Types(); 
         this.categories["Type"] = types;
-        types.url = '/src/types.json';
+        types.url = projs.url = options.typesData;
         types.deferred = types.fetch();
 
         // Create sponsor and date collections
