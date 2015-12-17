@@ -8,10 +8,6 @@ class YearsView extends CategoriesView {
         super(options);
     }
 
-    get events() {
-        return {"click #all_years": "showAll"};
-    }
-
 }
 
 export default YearsView;

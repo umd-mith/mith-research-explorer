@@ -1,11 +1,11 @@
 import * as Backbone from 'backbone';
 import Category from './model-category.js'
 
-class Sponsor extends Category {
+class ActiveProject extends Category {
 	constructor(options) {
 		super(options);
-		this.set("type", "Sponsor");
+		this.set("type", "ActiveProject");
 	}
 }
 
-export default Sponsor;
+export default ActiveProject;

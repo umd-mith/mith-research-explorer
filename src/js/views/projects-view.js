@@ -5,10 +5,19 @@ import ProjectView from './project-view.js';
 import Events from '../utils/backbone-events.js';
 
 class ProjectsView extends Backbone.View {
+
+    get categoriesTable() {
+        return {
+            "Topic" : "topic",
+            "Type" : "research_type",
+            "Sponsor" : "research_sponsor",
+            "YearRange" : "start",
+            "ActiveProject" : "active"
+        }
+    }
+
     initialize() {
-        this.listenTo(Events, "projects:showOne", this.showProjectsFor);
-        this.listenTo(Events, "projects:include", this.includeProjects);
-        this.listenTo(Events, "projects:exclude", this.excludeProjects);
+        this.listenTo(Events, "projects:intersect", this.intersectProjects);
         this.listenTo(this, "projects:sort", this.sortProjects);
     }
 
@@ -62,176 +71,34 @@ class ProjectsView extends Backbone.View {
         this.render(order);
     }
 
-    showProjectsFor(options) {
-        this.collection.each(function (proj) {
-            // Reset all
-            proj.set("activeTopics", []);
-            proj.set("activeTypes", []);
-            proj.set("activeSponsors", []);
-            proj.set("activeYears", []);
-            if (proj.get("attached")){
-                proj.trigger("view:remove");
-            }
-            // Then restore current category
-            if (options.catType=="Topic"){
-                if (proj.get("topic")) {
-                    if (proj.get("topic").indexOf(options.catName) !== -1) {
-                        // Record info about the topic
-                        proj.set("activeTopics", [options.catName]); 
-                        proj.trigger("view:restore");
-                    }
-                } 
-            }
-            else if (options.catType=="Type"){
-                if (proj.get("research_type")) {
-                    if (proj.get("research_type").indexOf(options.catName) !== -1) {
-                        // Record info about the type
-                        proj.set("activeTypes", [options.catName]); 
-                        proj.trigger("view:restore");
-                    }
-                }   
-            }     
-            else if (options.catType=="Sponsor"){
-                if (proj.get("research_sponsor")) {
-                    if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
-                        // Record info about the type
-                        proj.set("activeSponsors", [options.catName]); 
-                        proj.trigger("view:restore");
-                    }
-                }   
-            }
-            else if (options.catType=="YearRange"){
-                let yearLimits = options.catName.split(" – ");
-                let yearRange = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);   
-                if (proj.get("start")) {
-                    if (yearRange.indexOf(parseInt(proj.get("start").substring(0,4))) !== -1) {
-                        // Record info about the type
-                        proj.set("activeYears", [options.catName]); 
-                        proj.trigger("view:restore");
-                    }
-                }   
-            }           
-            
-        });
-    }
+    intersectProjects(activeCategories) {
 
-    includeProjects(options) {
-        this.collection.each(function (proj) {
-            if (options.catType=="Topic"){
-                if (proj.get("topic")) {
-                    if (proj.get("topic").indexOf(options.catName) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeTopic"));
-                        activeSet.add(options.catName);
-                        proj.set("activeTopic", Array.from(activeSet)); 
-                        if (!proj.get("attached")){
-                            proj.trigger("view:restore");
-                        }  
-                    }
-                } 
-            }
-            else if (options.catType=="Type"){
-                if (proj.get("research_type")) {
-                    if (proj.get("research_type").indexOf(options.catName) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeTypes"));
-                        activeSet.add(options.catName);
-                        proj.set("activeTypes", Array.from(activeSet)); 
-                        if (!proj.get("attached")){
-                            proj.trigger("view:restore");
-                        }
-                    }
-                }   
-            }
-            else if (options.catType=="Sponsor"){
-                if (proj.get("research_sponsor")) {
-                    if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeSponsors"));
-                        activeSet.add(options.catName);
-                        proj.set("activeSponsors", Array.from(activeSet)); 
-                        if (!proj.get("attached")){
-                            proj.trigger("view:restore");
-                        }
-                    }
-                }   
-            }
-            else if (options.catType=="YearRange"){
-                let yearLimits = options.catName.split(" – ");
-                let yearRange = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
-                if (proj.get("start")) {
-                    if (yearRange.indexOf(parseInt(proj.get("start").substring(0,4))) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeSponsors"));
-                        activeSet.add(options.catName);
-                        proj.set("activeSponsors", Array.from(activeSet)); 
-                        if (!proj.get("attached")){
-                            proj.trigger("view:restore");
-                        }
-                    }
-                }   
-            }
-        });
-    }
+        this.collection.each( (proj) => {
 
-    excludeProjects(options) {
+            if (!proj.get("attached")){
+                proj.trigger("view:restore");
+            }
 
-        this.collection.each(function (proj) {
-            if (options.catType=="Topic"){
-                if (proj.get("topic")) {
-                    if (proj.get("topic").indexOf(options.catName) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeTopics"));
-                        activeSet.delete(options.catName);
-                        proj.set("activeTopics", Array.from(activeSet));
-                        // Do not remove if other topics are active
-                        if (proj.get("attached") && !activeSet.size){
-                            proj.trigger("view:remove");
-                        }  
+            for (let activeCat of Object.keys(activeCategories)) {
+                if (activeCategories[activeCat].length) {
+                    let field = this.categoriesTable[activeCat];
+                    if (proj.get(field)) {
+                        // it has to intersect with at least one term from each list
+                        // in current active category
+                        for (let terms of activeCategories[activeCat]) {
+                            let fieldData = proj.get(field) instanceof Array ? proj.get(field) : [proj.get(field)];
+                            if (activeCat == "YearRange") {
+                                let yearLimits = terms[0].split(" – ");
+                                terms = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
+                                fieldData = [parseInt(fieldData[0].substring(0,4))];
+                            }
+                            if (!_.intersection(fieldData, terms).length) {
+                                proj.trigger("view:remove");
+                            }
+                        }
                     }
-                } 
+                }                
             }
-            else if (options.catType=="Type"){
-                if (proj.get("research_type")) {
-                    if (proj.get("research_type").indexOf(options.catName) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeTypes"));
-                        activeSet.delete(options.catName);
-                        proj.set("activeTypes", Array.from(activeSet));
-                        if (proj.get("attached") && !activeSet.size){
-                            proj.trigger("view:remove");
-                        }
-                    }
-                }   
-            }  
-            else if (options.catType=="Sponsor"){
-                if (proj.get("research_sponsor")) {
-                    if (proj.get("research_sponsor").indexOf(options.catName) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeSponsors"));
-                        activeSet.delete(options.catName);
-                        proj.set("activeSponsor", Array.from(activeSet));
-                        if (proj.get("attached") && !activeSet.size){
-                            proj.trigger("view:remove");
-                        }
-                    }
-                }   
-            }
-            else if (options.catType=="YearRange"){
-                let yearLimits = options.catName.split(" – ");
-                let yearRange = _.range(parseInt(yearLimits[0]), parseInt(yearLimits[1])+1);
-                if (proj.get("start")) {
-                    if (yearRange.indexOf(parseInt(proj.get("start").substring(0,4))) !== -1) {
-                        // Record info about the type
-                        let activeSet = new Set(proj.get("activeSponsors"));
-                        activeSet.delete(options.catName);
-                        proj.set("activeSponsor", Array.from(activeSet));
-                        if (proj.get("attached") && !activeSet.size){
-                            proj.trigger("view:remove");
-                        }
-                    }
-                }   
-            }    
         });
     }
 }

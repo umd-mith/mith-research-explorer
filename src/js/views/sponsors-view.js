@@ -8,10 +8,6 @@ class SponsorsView extends CategoriesView {
         super(options);
     }
 
-    get events() {
-        return {"click #all_sponsors": "showAll"};
-    }
-
 }
 
 export default SponsorsView;
