@@ -36,6 +36,9 @@ class CategoryView extends Backbone.View {
 
     toggle(e) {  
 
+        // We're toggling, so the box will never be indeterminate
+        $(e.target).removeClass("indeterminate");
+
         let checked = $(e.target).prop("checked");
 
         if (checked) {
