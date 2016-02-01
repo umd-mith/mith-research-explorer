@@ -174,13 +174,13 @@ class CategoryView extends Backbone.View {
         let icon = this.$el.find("i:first");
         if (visible == "none") {
             subsetEl.css("display", "block");
-            icon.removeClass("fa-caret-up");
-            icon.addClass("fa-caret-right");
+            icon.removeClass("fa-caret-right");
+            icon.addClass("fa-caret-down");
         }
         else {
             subsetEl.css("display", "none");
-            icon.removeClass("fa-caret-right");
-            icon.addClass("fa-caret-up");
+            icon.removeClass("fa-caret-down");
+            icon.addClass("fa-caret-right");
         }
     }
 
