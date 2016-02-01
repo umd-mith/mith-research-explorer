@@ -8,8 +8,8 @@ $(() => {
     // Before building, replace *Data parameters with actual location.
     new MRE({
             el:"#content", 
-            projectsData: "projects.json",
-            topicsData: "taxonomy.json",
-            typesData: "types.json",
+            projectsData: "/wp-content/mu-plugins/mith-research-explorer-data/projects.json",
+            topicsData: "/wp-content/mu-plugins/mith-research-explorer-data/topics.json",
+            typesData: "/wp-content/mu-plugins/mith-research-explorer-data/types.json",
          });
 });
