@@ -8,7 +8,7 @@ class Project extends Backbone.Model {
             resp.research_sponsor = ["No sponsor"];
         }
 
-        resp.active = resp.active;
+        resp.active = resp.active.toString();
         
 		return resp;
 	}

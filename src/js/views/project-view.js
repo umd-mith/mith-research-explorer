@@ -10,7 +10,7 @@ class ProjectView extends Backbone.View {
         this.listenTo(this.model, 'view:remove', this.detach);
         this.listenTo(this.model, 'view:restore', this.render);
 
-        let isActive = this.model.get("active");
+        let isActive = this.model.get("active") == "true";
 
         var monthNames = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"

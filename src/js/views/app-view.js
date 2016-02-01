@@ -141,7 +141,7 @@ class MRE extends Backbone.View {
                     }
                 }     
 
-                if (proj.get("active")){
+                if (proj.get("active") == "true"){
                     activeProjects.first().get("projects").add(proj);
                 }            
 
